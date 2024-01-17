@@ -51,6 +51,10 @@ def _machine_group_list_to_str(machine_group_list) -> str:
     for machine_group in machine_group_list:
         is_elastic = False
         resource_type = machines_base.ResourceType.STANDARD.value
+        spot = None
+
+        if hasattr(machine_group, "spot"):
+            spot = machine_group.spot
 
         if isinstance(machine_group, resources.ElasticMachineGroup):
             num_active_machines = machine_group.num_active_machines
@@ -61,11 +65,12 @@ def _machine_group_list_to_str(machine_group_list) -> str:
             num_active_machines = machine_group.num_machines
             if isinstance(machine_group, resources.MPICluster):
                 resource_type = machines_base.ResourceType.MPI.value
+                spot = None
 
         rows.append([
             machine_group.name, machine_group.machine_type, is_elastic,
             resource_type, num_active_machines, machine_group.disk_size_gb,
-            machine_group.spot, machine_group.create_time
+            spot, machine_group.create_time
         ])
 
     formatters = {"Started at (UTC)": format_utils.datetime_formatter}

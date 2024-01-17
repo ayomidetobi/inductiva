@@ -14,15 +14,45 @@ def start_machine_group(args):
     num_machines = args.num_machines
     disk_size_gb = args.disk_size
     spot = args.spot
+    elastic = args.elastic
+    max_machines = args.max_machines
 
-    machine = inductiva.resources.MachineGroup(machine_type=machine_type,
-                                               num_machines=num_machines,
-                                               disk_size_gb=disk_size_gb,
-                                               spot=spot)
+    if elastic:
+        if max_machines is None:
+            max_machines = num_machines
+        elif max_machines < num_machines:
+            raise ValueError("`max_machines` must be greater or equal than "
+                             "`num_machines`.")
+        machine_group = inductiva.resources.ElasticMachineGroup(
+            machine_type=machine_type,
+            min_machines=num_machines,
+            max_machines=max_machines,
+            spot=spot,
+            disk_size_gb=disk_size_gb)
+    else:
+        machine_group = inductiva.resources.MachineGroup(
+            machine_type=machine_type,
+            num_machines=num_machines,
+            disk_size_gb=disk_size_gb,
+            spot=spot)
 
-    machine.start()
+    machine_group.start()
 
-    print(f"Machine group started.\nName: {machine.name}")
+    print(f"Machine group started.\nName: {machine_group.name}")
+
+
+def start_mpi_cluster(args):
+    machine_type = args.machine_type
+    num_machines = args.num_machines
+    disk_size_gb = args.disk_size
+
+    mpi_cluster = inductiva.resources.MPICluster(machine_type=machine_type,
+                                                 num_machines=num_machines,
+                                                 disk_size_gb=disk_size_gb)
+
+    mpi_cluster.start()
+
+    print(f"MPI Cluster started.\nName: {mpi_cluster.name}")
 
 
 def list_machine_types_available(args):

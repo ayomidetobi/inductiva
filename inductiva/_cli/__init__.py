@@ -7,4 +7,4 @@ from . import utils
 from . import machines
 from .main import main
 from .tasks_parsers import register_tasks_cli
-from .machines_parsers import register_machines_cli
+from .machines_parsers import register_machines_cli, register_machines_start_cli
