@@ -87,7 +87,7 @@ def add_terminate_subparser(parser):
     subparser.add_argument("name",
                            type=str,
                            help="Name of the computational resource")
-    subparser.set_defaults(func=_cli.machines.terminate_machine_group)
+    subparser.set_defaults(func=_cli.machines.terminate_computational_resource)
 
 
 def add_list_subparser(parser):
