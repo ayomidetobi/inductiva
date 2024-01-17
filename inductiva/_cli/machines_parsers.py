@@ -83,10 +83,10 @@ def add_cost_subparser(parser):
 def add_terminate_subparser(parser):
     """Subparser for terminate command."""
     subparser = parser.add_parser("terminate",
-                                  help="Terminate a machine resource")
+                                  help="Terminate a computational resource")
     subparser.add_argument("name",
                            type=str,
-                           help="Name of the machine resource to terminate")
+                           help="Name of the computational resource")
     subparser.set_defaults(func=_cli.machines.terminate_machine_group)
 
 

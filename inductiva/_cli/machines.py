@@ -90,17 +90,17 @@ def estimate_machine_cost(args):
     print(f"Estimated cost of machine: {cost} $/h.")
 
 
-def terminate_machine_group(args):
-    """Terminate a machine group from a given name."""
+def terminate_computational_resource(args):
+    """Terminate a computational resource from a given name."""
     machine_name = args.name
 
-    print("Terminating machine group... If exists.")
+    print("Terminating computational resource... If exists.")
     machines_list = inductiva.resources.machine_groups.get()
 
     for machine in machines_list:
         if machine.name == machine_name:
             machine.terminate()
-            print(f"Terminated machine group: {machine_name}")
+            print(f"Computation resource {machine_name} terminated.")
             return
 
     print(f"Machine {machine_name} not found.")
