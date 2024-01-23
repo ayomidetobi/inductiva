@@ -8,9 +8,11 @@ from inductiva import types, tasks, simulators
 class SWASH(simulators.Simulator):
     """Class to invoke a generic SWASH simulation on the API."""
 
-    def __init__(self):
-        super().__init__()
-        self.api_method_name = "sw.swash.run_simulation"
+    _API_METHOD_NAME = "swash"
+
+    @property
+    def api_method_name(self) -> str:
+        return self._API_METHOD_NAME
 
     def run(
         self,

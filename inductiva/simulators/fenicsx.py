@@ -8,9 +8,11 @@ from inductiva import simulators, types, tasks
 class FEniCSx(simulators.Simulator):
     """Class to invoke a generic FEniCSx simulation on the API."""
 
-    def __init__(self):
-        super().__init__()
-        self.api_method_name = "fem.fenicsx.run_simulation"
+    _API_METHOD_NAME = "fenicsx"
+
+    @property
+    def api_method_name(self) -> str:
+        return self._API_METHOD_NAME
 
     def run(
         self,

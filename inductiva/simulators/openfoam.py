@@ -21,7 +21,11 @@ class OpenFOAM(simulators.Simulator):
                              f"Available: {AVAILABLE_OPENFOAM_VERSIONS}")
 
         super().__init__()
-        self.api_method_name = f"fvm.openfoam_{version}.run_simulation"
+        self._api_method_name = f"openfoam_{version}"
+
+    @property
+    def api_method_name(self) -> str:
+        return self._api_method_name
 
     def run(
         self,

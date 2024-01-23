@@ -11,18 +11,11 @@ inductiva.api_key = "dummy"
 class TesterSimulator(simulators.Simulator):
     """Dummy simulator for testing purposes."""
 
-    def __init__(self):
-        super().__init__()
-        self.api_method_name = "tester.run_simulation"
+    _API_METHOD_NAME = "gromacs"
 
-
-def test_override_api_method_prefix():
-    simulator = simulators.OpenFOAM()
-    assert simulator.api_method_name == \
-        "fvm.openfoam_foundation.run_simulation"
-    simulator.override_api_method_prefix("windtunnel")
-    assert simulator.api_method_name == \
-        "windtunnel.openfoam_foundation.run_simulation"
+    @property
+    def api_method_name(self) -> str:
+        return self._API_METHOD_NAME
 
 
 def test_validate_computational_resources__unsupported_resource__raise_error():
@@ -35,7 +28,7 @@ def test_validate_computational_resources__unsupported_resource__raise_error():
                                    num_machines=2,
                                    register=False)
 
-    simulator = simulators.Simulator()
+    simulator = simulators.TesterSimulator()
 
     with pytest.raises(ValueError) as excinfo:
         simulator.validate_computational_resources(cluster)

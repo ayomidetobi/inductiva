@@ -9,9 +9,11 @@ from inductiva import simulators, types, tasks
 class REEF3D(simulators.Simulator):
     """Class to invoke a generic FDS simulation on the API."""
 
-    def __init__(self):
-        super().__init__()
-        self.api_method_name = "reef3d.reef3d.run_simulation"
+    _API_METHOD_NAME = "reef3d"
+
+    @property
+    def api_method_name(self) -> str:
+        return self._API_METHOD_NAME
 
     def run(
         self,

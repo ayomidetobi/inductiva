@@ -7,9 +7,11 @@ from inductiva import types, tasks, simulators
 class SplishSplash(simulators.Simulator):
     """Class to invoke a generic SPlisHSPlasH simulation on the API."""
 
-    def __init__(self):
-        super().__init__()
-        self.api_method_name = "sph.splishsplash.run_simulation"
+    _API_METHOD_NAME = "splishsplash"
+
+    @property
+    def api_method_name(self) -> str:
+        return self._API_METHOD_NAME
 
     def run(
         self,

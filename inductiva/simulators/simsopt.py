@@ -7,9 +7,11 @@ from inductiva import simulators, tasks, types
 class SIMSOPT(simulators.Simulator):
     """Invokes a simsopt simulation on the API."""
 
-    def __init__(self):
-        super().__init__()
-        self.api_method_name = "stellarators.simsopt.run_simulation"
+    _API_METHOD_NAME = "simsopt"
+
+    @property
+    def api_method_name(self) -> str:
+        return self._API_METHOD_NAME
 
     def run(
         self,
