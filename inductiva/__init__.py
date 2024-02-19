@@ -3,6 +3,7 @@ import os
 import sys
 import logging
 import contextvars
+from typing import Any, Dict, Optional
 
 import absl
 from inductiva.managers.project_manager import ProjectManager
@@ -95,3 +96,15 @@ _ansi_enabled = _supports_ansi()
 _check_key()
 
 pm = ProjectManager()
+
+
+def start_project(name: str,
+                  tags: Optional[Dict[str, Any]] = None,
+                  make_active: bool = None):
+    """Create a new project"""
+    pm.create_project(name, tags, make_active)
+
+
+def get_active_project():
+    """Get the active project"""
+    return pm.active_project

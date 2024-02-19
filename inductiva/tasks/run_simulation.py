@@ -8,6 +8,7 @@ import threading
 
 from absl import logging
 
+import inductiva
 from inductiva import tasks, types
 from inductiva.api import methods
 from inductiva.utils import format_utils, files
@@ -72,18 +73,25 @@ def run_simulation(
         if extra_metadata is not None:
             metadata = {**metadata, **extra_metadata}
 
+        active_project= inductiva.get_active_project()
+        if active_project:
+            metadata_filename = inductiva.get_active_project().get_metadata_file()
+        else:
+            metadata_filename = TASK_METADATA_FILENAME
+
         with _metadata_lock:
-            _save_metadata({
-                **{
-                    "task_id": task_id,
-                    "input_dir": str(input_dir)
+            _save_metadata(
+                {
+                    **{
+                        "task_id": task_id,
+                        "input_dir": str(input_dir)
+                    },
+                    **metadata
                 },
-                **metadata
-            })
+                metadata_filename=metadata_filename)
         logging.info(
             "Task %s configurations metadata saved to the tasks metadata file "
-            "%s in the current working directory.", task_id,
-            TASK_METADATA_FILENAME)
+            "%s in the current working directory.", task_id, metadata_filename)
 
     logging.info(
         "Consider tracking the status of the task via CLI:"
@@ -95,10 +103,12 @@ def run_simulation(
     return task
 
 
-def _save_metadata(metadata, mode="a"):
+def _save_metadata(metadata,
+                   mode="a",
+                   metadata_filename=TASK_METADATA_FILENAME):
     """Appends metadata to the TASK_METADATA_FILENAME in the cwd."""
 
-    file_path = files.resolve_output_path(TASK_METADATA_FILENAME)
+    file_path = files.resolve_output_path(metadata_filename)
     if not os.path.exists(file_path.parent):
         os.mkdir(file_path.parent)
     with open(file_path, mode, encoding="utf-8") as f:
