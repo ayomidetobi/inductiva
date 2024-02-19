@@ -29,11 +29,9 @@ def validate_api_key(api_key: Optional[str]) -> Configuration:
     """Validates the API key and returns API configuration"""
     if inductiva.api_key is None:
         # pylint: disable=line-too-long
-        raise ValueError(
-            "No API Key specified. "
-            "Please set the INDUCTIVA_API_KEY environment variable.\n"
-            "More infomation at:"
-            "https://inductiva-research-labs-inductiva.readthedocs-hosted.com/en/latest/Getting%20Started.html"
+        return ValueError("Please set the INDUCTIVA_API_KEY environment variable.\n"
+              "More infomation at:"
+              "https://inductiva-research-labs-inductiva.readthedocs-hosted.com/en/latest/Getting%20Started.html"
         )
     # pylint: enable=line-too-long
 

@@ -69,7 +69,10 @@ def _check_for_available_package_update():
 def _check_key():
     global _checked_key
 
-    if not _checked_key and utils.format_utils.getenv_bool(
+    if api_key is None:
+        print("Inductiva API Key not set. "
+              "Please set it using the INDUCTIVA_API_KEY environment variable.")
+    elif not _checked_key and utils.format_utils.getenv_bool(
             "GITHUB_ACTIONS", False) is not True:
         api.methods.validate_api_key(api_key)
         _checked_key = True
