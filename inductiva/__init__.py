@@ -6,6 +6,7 @@ import contextvars
 from typing import Any, Dict, Optional
 
 import absl
+
 from inductiva.managers.project_manager import ProjectManager
 from inductiva.project.project import Project
 
@@ -16,6 +17,8 @@ from . import storage
 from . import utils
 from . import tasks
 from . import logs
+from . import managers
+from . import project
 
 logs.setup()
 

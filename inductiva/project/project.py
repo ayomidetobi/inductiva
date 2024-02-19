@@ -22,7 +22,10 @@ class Project:
 
         self.metadata_dir = self.working_dir + "/" + name + '.json'
 
-        self.tags = tags or {}
+        self.tags = tags or []
+
+        if not isinstance(self.tags, list):
+            raise ValueError("Tags must be a list")
 
         full_json = {"tags": self.tags}
 
@@ -50,3 +53,12 @@ class Project:
     def add_tag(self, key: str, value: Any):
         """Add a tag to the project"""
         #read tags from file, update tags with the new tag and write to file again
+        with open(self.metadata_dir, 'r', encoding="utf-8") as file:
+            file_lines = file.readlines()
+            tags_dict = json.loads(file_lines[0])
+
+        tags_dict["tags"].append({key: value})
+        print(tags_dict)
+        file_lines[0] = json.dumps(tags_dict)
+        with open(self.metadata_dir, 'w', encoding="utf-8") as file:
+            file.writelines(file_lines)
