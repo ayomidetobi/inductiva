@@ -7,6 +7,7 @@ from typing import Any, Dict, Optional
 
 import absl
 from inductiva.managers.project_manager import ProjectManager
+from inductiva.project.project import Project
 
 from . import api
 from . import simulators
@@ -100,11 +101,22 @@ pm = ProjectManager()
 
 def start_project(name: str,
                   tags: Optional[Dict[str, Any]] = None,
-                  make_active: bool = None):
+                  make_active: bool = None) -> Project:
     """Create a new project"""
-    pm.create_project(name, tags, make_active)
+    return pm.create_project(name, tags, make_active)
 
 
-def get_active_project():
+def end_project():
+    """End the active project"""
+    if pm.active_project:
+        pm.active_project.end_project()
+
+
+def set_active_project(project: Project):
+    """Set the active project"""
+    pm.active_project = project
+
+
+def active_project():
     """Get the active project"""
     return pm.active_project

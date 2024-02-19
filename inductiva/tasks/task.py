@@ -7,8 +7,11 @@ from absl import logging
 from typing import Dict, Any, List, Optional, Tuple, Union
 from typing_extensions import TypedDict
 import datetime
+
+from inductiva.project.project import Project
 from ..localization import translator as __
 
+import inductiva
 from inductiva import constants
 from inductiva.client import exceptions, models
 from inductiva import api, types
@@ -60,6 +63,7 @@ class Task:
         self._api = tasks_api.TasksApi(api.get_client())
         self._info = None
         self._status = None
+        self.project = inductiva.active_project()
 
     def is_running(self) -> bool:
         """Validate if the task is running.
@@ -393,7 +397,12 @@ class Task:
         response = api_response.response
 
         if output_dir is None:
-            output_dir = files.resolve_output_path(self.id)
+
+            if self.project is None:
+                output_dir = files.resolve_output_path(self.id)
+            else:
+                output_dir = pathlib.Path(self.project.output_dir + self.id)
+
         else:
             output_dir = files.resolve_output_path(output_dir)
 

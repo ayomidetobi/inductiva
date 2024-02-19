@@ -45,3 +45,12 @@ class ProjectManager:
         if make_active:
             self.active_project = project
             print(f"Active project is now {project.name}")
+        return project
+
+    def set_active_project(self, project: Project):
+        """Set the active project"""
+        self.active_project = project
+        if project:
+            print(f"Active project is now {project.name}")
+        else:
+            print("Active project is now None")

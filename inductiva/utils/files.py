@@ -38,7 +38,10 @@ def resolve_output_path(path: Optional[types.Path]) -> pathlib.Path:
     """
     resolved_path = pathlib.Path.cwd()
 
-    if inductiva.get_output_dir():
+    if inductiva.active_project():
+        resolved_path = pathlib.Path(inductiva.active_project().working_dir)
+
+    elif inductiva.get_output_dir():
         resolved_path = pathlib.Path(inductiva.get_output_dir())
 
     if path is not None:
@@ -88,10 +91,8 @@ def get_sorted_files(data_dir: str,
 
 def _unzip(zip_path: pathlib.Path):
     """Unzip a zip archive and remove the .zip."""
-
     with zipfile.ZipFile(zip_path, "r") as zip_ref:
-        zip_ref.extractall()
-
+        zip_ref.extractall(inductiva.active_project().input_dir)
     zip_path.unlink()
 
 
@@ -111,6 +112,10 @@ def download_from_url(url: str, unzip: bool = False) -> str:
     # Get archive name from url passed
     local_path = url.split("/")[-1]
     local_path = pathlib.Path(local_path)
+
+    if inductiva.active_project():
+        local_path = pathlib.Path(inductiva.active_project().input_dir,
+                                  local_path)
 
     try:
         logging.info("Downloading from URL to the local path: %s", local_path)

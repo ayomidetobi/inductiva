@@ -73,9 +73,9 @@ def run_simulation(
         if extra_metadata is not None:
             metadata = {**metadata, **extra_metadata}
 
-        active_project= inductiva.get_active_project()
+        active_project = inductiva.active_project()
         if active_project:
-            metadata_filename = inductiva.get_active_project().get_metadata_file()
+            metadata_filename = active_project.name_metadata
         else:
             metadata_filename = TASK_METADATA_FILENAME
 
