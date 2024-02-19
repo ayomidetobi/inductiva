@@ -5,6 +5,7 @@ import logging
 import contextvars
 
 import absl
+from inductiva.managers.project_manager import ProjectManager
 
 from . import api
 from . import simulators
@@ -92,3 +93,5 @@ def _supports_ansi():
 _ansi_enabled = _supports_ansi()
 
 _check_key()
+
+pm = ProjectManager()
