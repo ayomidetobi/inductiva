@@ -1,0 +1,705 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<meta content="Dive into the first crucial step of synthetic data generation and learn how to define your 'base case' simulation model." name="description" />
+<meta content="Inductiva API, Programming, HPC, Simulation, Tutorial, Synthetic Data Generation, Physics-ML, SPH" name="keywords" />
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-188572165-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-188572165-1');
+    </script>
+    <meta property="og:title" content="Set Up the “Base Case”" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://tutorials.inductiva.ai/generating-synthetic-data/synthetic-data-generation-2.html" />
+<meta property="og:site_name" content="Inductiva.ai Tutorials" />
+<meta property="og:description" content="In the [introduction]({% post_url 2024-03-13-api-synthetic-data-generation-1 %}) of this tutorial, we outlined and touched on the series of steps we take towards generating synthetic datasets for t..." />
+<meta property="og:image" content="https://tutorials.inductiva.ai/_static/inductiva-social-banner.jpg" />
+<meta property="og:image:alt" content="Inductiva.ai Tutorials" />
+
+    <title>Set Up the “Base Case” &#8212; Inductiva API Python client  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'generating-synthetic-data/synthetic-data-generation-2';</script>
+    <link rel="canonical" href="https://tutorials.inductiva.ai/generating-synthetic-data/synthetic-data-generation-2.html" />
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Choose the Hardware" href="synthetic-data-generation-3.html" />
+    <link rel="prev" title="Introduction" href="synthetic-data-generation-1.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/inductiva-logo-black.svg" class="logo__image only-light" alt="Inductiva API Python client  documentation - Home"/>
+    <script>document.write(`<img src="../_static/inductiva-logo-white.svg" class="logo__image only-dark" alt="Inductiva API Python client  documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Generating Synthetic Data</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="synthetic-data-generation-1.html">Introduction</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Set Up the “Base Case”</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthetic-data-generation-3.html">Choose the Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthetic-data-generation-4.html">Generalize the “Base Case” Physical Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthetic-data-generation-5.html">Test the Impact of Hyperparameter Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthetic-data-generation-6.html">Benchmark Computational Resources</a></li>
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/generating-synthetic-data/synthetic-data-generation-2.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Set Up the “Base Case”</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-setting-up-our-base-case">Step 1: Setting Up Our “Base Case”</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configuring-the-base-case-parameters">Configuring the “Base Case” Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-our-base-case">Running our “Base Case”</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#enhancing-the-base-case-resolution">Enhancing the “Base Case” Resolution</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#up-next-choosing-more-powerful-hardware">Up Next: Choosing more Powerful Hardware</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="set-up-the-base-case">
+<h1>Set Up the “Base Case”<a class="headerlink" href="#set-up-the-base-case" title="Permalink to this heading">#</a></h1>
+<p>In the [introduction]({% post_url 2024-03-13-api-synthetic-data-generation-1 %})
+of this tutorial, we outlined and touched on the series of steps we take towards
+generating synthetic datasets for training Physics-ML models. In this chapter, we
+will dive into the first step of this process: <strong>defining a “base case”</strong> simulation
+model of the system we wish to study.</p>
+<p>As you recall, we followed through a <a class="reference external" href="https://arxiv.org/abs/2002.09405" target="_blank">study by Sanchez-Gonzalez et al.</a>
+where a Graph Neural Network (GNN) is used to learn and potentially replace classic
+fluid dynamics simulators. The authors of that study were specifically interested in using
+machine learning to mimic Smoothed Particle Hydrodynamics (SPH), a mesh-free fluid
+simulation technique that models both fluids and surface constraints, like walls
+or obstacles, as vast groups of particles that move and interact with each other
+through time and space, according to the laws of fluid dynamics.</p>
+<p>The computational challenge of such a simulation method lies in managing
+these interactions, especially with simulations involving millions of particles.
+The study used Graph Neural Networks (GNNs) to model these particles
+and their interactions as a graph, learning to update each particle’s acceleration
+over time. The researchers use a straightforward simulation scenario of a fluid
+block dropped inside a box, and then model how this fluid interacts with the box’s
+surfaces until it stabilizes. Their approach sought to enable GNNs to generalize
+fluid behavior predictions across a range of physical conditions and properties,
+including density, viscosity, and different initial states of position and velocity.</p>
+<p>Over this tutorial series, we want to show you how to create a synthetic dataset to train
+this GNN model for such a simulation use case, through the Inductiva API. This all
+begins with preparing our “base case”, using one of the open-source Smoothed Particle
+Hydrodynamics (SPH) simulations already built into our API: <a class="reference external" href="https://docs.inductiva.ai/en/latest/simulators/SPlisHSPlasH.html" target="_blank">SPlisHSPlasH</a>.</p>
+<div style="display: flex; justify-content:center">
+<video width=500 loop muted autoplay preload="auto">
+<source src="../_static/generating-synthetic-data/fluid_drop.mp4" type="video/mp4">
+</video>
+</div>
+<p>Video 1: Dynamics of a water
+block simulated with <em>29791 SPH particles</em>. Here, the block is left to fall with
+gravity - <em>splash!</em> Simulation performed via Inductiva API.</p>
+<section id="step-1-setting-up-our-base-case">
+<h2>Step 1: Setting Up Our “Base Case”<a class="headerlink" href="#step-1-setting-up-our-base-case" title="Permalink to this heading">#</a></h2>
+<p>Building on the simple simulation scenario used by the researchers in their study,
+our “base case” simulation is quite the same: <em>a 0.5m cube of water, initially at
+rest at one of the top corners of a sealed 1m cubic box, is dropped at the simulation
+onset, allowing the water to spill and splash against the walls of the closed box
+for 4 seconds.</em></p>
+<p>Make sure you’re equipped with the Inductiva API and have your API key
+at hand before diving into this tutorial. If this is your first encounter with our
+API, we highly recommend going through our <a class="reference external" href="https://docs.inductiva.ai/en/latest/get_started/installation.html" target="_blank">Quickstart Tutorial</a> to set up your environment correctly.</p>
+<section id="configuring-the-base-case-parameters">
+<h3>Configuring the “Base Case” Parameters<a class="headerlink" href="#configuring-the-base-case-parameters" title="Permalink to this heading">#</a></h3>
+<p>To kick things off, we’ve pre-configured an input directory containing all
+the configuration files necessary to run the SPlisHSPlasH simulation, and defined
+the particle radius to <em>0.01</em> to decrease the simulation’s runtime and test our API.</p>
+<blockquote>
+<div><p>Let’s <strong><a href="/assets/files/splishsplash-base-dir.zip" download="splishsplash-base-dir.zip" class="bi bi-cloud-download-fill">
+<span> download our pre-configured input folder,</span>
+</a></strong> and store it in a local
+directory.</p>
+</div></blockquote>
+<p>In this folder, we’ll find:</p>
+<ul class="simple">
+<li><p>An <code class="docutils literal notranslate"><span class="pre">.obj</span></code> file which is a simple data format that represents the 3D geometry of
+the containers. For our example, it contains a detailed outline of our cubic box
+geometry.</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">JSON</span></code> file which contains the simulation parameters required for SPlisHSPlasH to run.
+This script essentially comprises <strong>four key blocks</strong> that define the whole simulation;
+Configuration, RigidBodies, Materials. and FluidModels. This cofiguration file is
+crucial as it provides the flexibility to tweak simulation parameters, enabling
+us to to programmatically run multiple variations of our “base case” and generate
+a diverse enough dataset to train a machine learning (ML) model.</p></li>
+</ul>
+<p>Let’s take a closer look at these parameters and what they mean:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w">   </span>
+<span class="w">    </span><span class="c1">// 1. &quot;Configuration&quot; defines the simulation parameters. For now, we&#39;ve </span>
+<span class="w">    </span><span class="c1">// modified the particle radius to reduce the simulation runtime.</span>
+<span class="w">    </span><span class="nt">&quot;Configuration&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;stopAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;timeStepSize&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.01</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;particleRadius&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.01</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;simulationMethod&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;boundaryHandlingMethod&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;kernel&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;cflMethod&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;cflFactor&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;cflMinTimeStepSize&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0001</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;cflMaxTimeStepSize&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.005</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;gravitation&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">-9.81</span><span class="p">],</span>
+<span class="w">        </span><span class="nt">&quot;gradKernel&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;enableVTKExport&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;dataExportFPS&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;particleAttributes&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;velocity;density&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="c1">// 2. &quot;RigidBodies&quot; defines the unit containing the fluid. Here, our</span>
+<span class="w">    </span><span class="c1">// RigidBodies are shaped into a cube as outlined in our .obj file</span>
+<span class="w">    </span><span class="nt">&quot;RigidBodies&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;geometryFile&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;unit_box.obj&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;translation&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;scale&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;isDynamic&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="c1">// 3. &quot;Materials&quot; defines the properties of the fluid used in the</span>
+<span class="w">    </span><span class="c1">// simulation, including its density and viscosity, as well as the</span>
+<span class="w">    </span><span class="c1">// viscosity modeling method used by the algorithm.</span>
+<span class="w">    </span><span class="nt">&quot;Materials&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Fluid&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;density0&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;viscosity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1e-6</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;viscosityMethod&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="c1">// 4. &quot;FluidModels&quot; defines the initial state of the fluid in the</span>
+<span class="w">    </span><span class="c1">// simulation. Here, we set a 0.5m fluid cube with no initial velocity.</span>
+<span class="w">    </span><span class="nt">&quot;FluidModels&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Fluid&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;particleFile&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;unit_box.obj&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;translation&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;scale&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;initialVelocity&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>It’s essential to understand that these parameters collectively
+control the simulation’s behavior. Most importantly, the <strong>particle size plays
+a crucial role in determining the computational requirements of the simulation.</strong></p>
+</section>
+<section id="running-our-base-case">
+<h3>Running our “Base Case”<a class="headerlink" href="#running-our-base-case" title="Permalink to this heading">#</a></h3>
+<p>To run our “base case”, we’ll initialize the SPlisHSPlasH simulator using the API
+with just a couple lines of code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
+
+<span class="c1"># Set path to the input directory with the SPlisHSPlasH configuration files</span>
+<span class="n">input_dir</span> <span class="o">=</span> <span class="s2">&quot;splishsplash-base-dir&quot;</span>
+
+<span class="c1"># Initialize the SPlisHSPlasH simulator through the API</span>
+<span class="n">splishsplash</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">SplishSplash</span><span class="p">()</span>
+
+<span class="c1"># Run the simulation task with the parameters defined in the .json file</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">splishsplash</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
+                        <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;config.json&quot;</span><span class="p">)</span>
+
+<span class="c1"># Wait for the simulation to complete and download the outputs</span>
+<span class="n">task</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+<span class="n">task</span><span class="o">.</span><span class="n">download_outputs</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>When launching the simulation, the API will upload the input data from our local
+directory and schedule the simulation <code class="docutils literal notranslate"><span class="pre">task</span></code> for execution. It will also provide
+details about the <code class="docutils literal notranslate"><span class="pre">task</span></code>, including its ID and the machine group assigned for
+computation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Task</span> <span class="n">Information</span><span class="p">:</span>
+<span class="o">&gt;</span> <span class="n">ID</span><span class="p">:</span>                    <span class="n">i13o8djcoq70bsdut1x73zi69</span>
+<span class="o">&gt;</span> <span class="n">Method</span><span class="p">:</span>                <span class="n">splishsplash</span>
+<span class="o">&gt;</span> <span class="n">Local</span> <span class="nb">input</span> <span class="n">directory</span><span class="p">:</span> <span class="n">splishsplash</span><span class="o">-</span><span class="n">base</span><span class="o">-</span><span class="nb">dir</span>
+<span class="o">&gt;</span> <span class="n">Submitting</span> <span class="n">to</span> <span class="n">the</span> <span class="n">following</span> <span class="n">computational</span> <span class="n">resources</span><span class="p">:</span>
+ <span class="o">&gt;&gt;</span> <span class="n">Default</span> <span class="n">queue</span> <span class="k">with</span> <span class="n">c2</span><span class="o">-</span><span class="n">standard</span><span class="o">-</span><span class="mi">4</span> <span class="n">machines</span><span class="o">.</span>
+<span class="n">Preparing</span> <span class="n">upload</span> <span class="n">of</span> <span class="n">the</span> <span class="n">local</span> <span class="nb">input</span> <span class="n">directory</span> <span class="n">splishsplash</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="n">example</span>
+<span class="p">(</span><span class="mi">128</span> <span class="n">B</span><span class="p">)</span><span class="o">.</span>
+<span class="n">Local</span> <span class="nb">input</span> <span class="n">directory</span> <span class="n">successfully</span> <span class="n">uploaded</span><span class="o">.</span>
+<span class="n">Task</span> <span class="n">i13o8djcoq70bsdut1x73zi69</span> <span class="n">submitted</span> <span class="n">to</span> <span class="n">the</span> <span class="n">default</span> <span class="n">queue</span><span class="o">.</span>
+<span class="n">Simulation</span> <span class="n">metadata</span> <span class="n">logged</span> <span class="n">to</span><span class="p">:</span> <span class="n">inductiva_output</span><span class="o">/</span><span class="n">task_metadata</span><span class="o">.</span><span class="n">json</span>
+<span class="n">Task</span> <span class="n">i13o8djcoq70bsdut1x73zi69</span> <span class="n">configurations</span> <span class="n">metadata</span> <span class="n">saved</span> <span class="n">to</span> <span class="n">the</span> <span class="n">tasks</span>
+<span class="n">metadata</span> <span class="n">file</span> <span class="n">task_metadata</span><span class="o">.</span><span class="n">json</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">current</span> <span class="n">working</span> <span class="n">directory</span><span class="o">.</span>
+<span class="n">Consider</span> <span class="n">tracking</span> <span class="n">the</span> <span class="n">status</span> <span class="n">of</span> <span class="n">the</span> <span class="n">task</span> <span class="n">via</span> <span class="n">CLI</span><span class="p">:</span> 
+        <span class="n">inductiva</span> <span class="n">tasks</span> <span class="nb">list</span> <span class="o">--</span><span class="n">task</span><span class="o">-</span><span class="nb">id</span> <span class="n">i13o8djcoq70bsdut1x73zi69</span>
+<span class="n">Or</span><span class="p">,</span> <span class="n">tracking</span> <span class="n">the</span> <span class="n">logs</span> <span class="n">of</span> <span class="n">the</span> <span class="n">task</span> <span class="n">via</span> <span class="n">CLI</span><span class="p">:</span>
+        <span class="n">inductiva</span> <span class="n">logs</span> <span class="n">i13o8djcoq70bsdut1x73zi69</span>
+<span class="n">Task</span> <span class="n">i13o8djcoq70bsdut1x73zi69</span> <span class="n">successfully</span> <span class="n">queued</span> <span class="ow">and</span> <span class="n">waiting</span> <span class="n">to</span> <span class="n">be</span> <span class="n">picked</span><span class="o">-</span><span class="n">up</span>
+<span class="k">for</span> <span class="n">execution</span><span class="o">...</span>
+</pre></div>
+</div>
+<p>The simulation should take around <strong>2 minutes</strong> to complete and the resulting
+data will be stored inside a directory within <code class="docutils literal notranslate"><span class="pre">inductiva-output/{task-id}</span></code>. This
+includes <code class="docutils literal notranslate"><span class="pre">stderr.txt</span></code>, <code class="docutils literal notranslate"><span class="pre">stdout.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">log/SPH_log.txt</span></code> log files detailing the
+simulation process and any encountered errors, along with <code class="docutils literal notranslate"><span class="pre">vtk</span></code> files stored in
+the <code class="docutils literal notranslate"><span class="pre">vtk</span></code> directory that contain particle data at each simulation timestep:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tree inductiva-output/i13o8djcoq70bsdut1x73zi69
+inductiva-output/i13o8djcoq70bsdut1x73zi69
+inductiva-output/i13o8djcoq70bsdut1x73zi69
+├── log
+│   └── SPH_log.txt
+├── stderr.txt
+├── stdout.txt
+└── vtk
+    ├── ParticleData_Fluid_1.vtk
+    ├── ParticleData_Fluid_2.vtk
+     ...
+</pre></div>
+</div>
+<p>Running the above “base case” simulation was relatively quick due to its low
+resolution count of approximately <em>2,000 particles</em>. However, in the
+<a class="reference external" href="https://arxiv.org/abs/2002.09405" target="_blank">study by Sanchez-Gonzalez et al.</a> that we’re
+building upon, the researchers employ a Graph Neural Network (GNN) to simulate
+<strong>significantly larger systems</strong>, involving more than <em>20,000 particles</em>.</p>
+</section>
+<section id="enhancing-the-base-case-resolution">
+<h3>Enhancing the “Base Case” Resolution<a class="headerlink" href="#enhancing-the-base-case-resolution" title="Permalink to this heading">#</a></h3>
+<p>Let’s return to our input directory to revisit the <code class="docutils literal notranslate"><span class="pre">JSON</span></code> file that contains our
+simulation’s parameters. To align our simulation more closely with the particle
+count seen in the study, we’ll adjust the <code class="docutils literal notranslate"><span class="pre">particleRadius</span></code> from <em>0.01</em> to <em>0.008</em>.
+This change will increase the number of particles in our simulation, enhancing the
+simulation’s resolution for more detailed results.</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Set the particle radius to 0.008 in “Configuration” block.</span><a class="headerlink" href="#id1" title="Permalink to this code">#</a></div>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w">   </span>
+<span class="w">    </span><span class="nt">&quot;Configuration&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;stopAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;timeStepSize&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.01</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;particleRadius&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.008</span><span class="p">,</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</div>
+</div>
+<p>Following the same steps we took to <a class="reference internal" href="#running-our-base-case">run our preconfigured “base case”</a> above,
+this simulation should take around <strong>30 minutes</strong> to run, generating roughly <em>300 MB of data</em>
+from <em>601 frames</em>. While tweaking our “base case” to increase particle count gave
+us more detailed data, it also meant waiting 30 minutes for a single run simulating
+4 seconds of fluid dynamics. If we’re aiming to run 10,000 or even 20,000
+variations of our “base case” to have a large enough dataset, we’re looking
+at an astronomical number of computation hours! To speed this up, choosing more
+powerful computational resources becomes an essential step.</p>
+</section>
+</section>
+<section id="up-next-choosing-more-powerful-hardware">
+<h2>Up Next: Choosing more Powerful Hardware<a class="headerlink" href="#up-next-choosing-more-powerful-hardware" title="Permalink to this heading">#</a></h2>
+<p>In this step, we’ve learned how to set up our “base case” simulation and configure
+its parameters. Next, we’ll dive into how we can speed things up and keep the waiting
+to a minimum, particularly as we tweak the parameters to simulate a much higher
+particle count. Through our API, we’ll explore available resources, their cost,
+and learn how to choose the right machine setup for our needs.</p>
+<p>See you in the [next one]({% post_url 2024-03-13-api-synthetic-data-generation-3 %})!</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="synthetic-data-generation-1.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Introduction</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="synthetic-data-generation-3.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Choose the Hardware</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-setting-up-our-base-case">Step 1: Setting Up Our “Base Case”</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configuring-the-base-case-parameters">Configuring the “Base Case” Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-our-base-case">Running our “Base Case”</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#enhancing-the-base-case-resolution">Enhancing the “Base Case” Resolution</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#up-next-choosing-more-powerful-hardware">Up Next: Choosing more Powerful Hardware</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Inductiva Research Labs
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, Inductiva Research Labs.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

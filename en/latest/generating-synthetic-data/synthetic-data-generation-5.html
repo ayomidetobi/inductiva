@@ -1,0 +1,722 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<meta content="Explore the impact of adjusting simulation hyperparameters like particle radius on the simulation's computational cost and runtimes." name="description" />
+<meta content="Inductiva API, Programming, HPC, Simulation, Tutorial, Synthetic Data Generation, Physics-ML, SPH" name="keywords" />
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-188572165-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-188572165-1');
+    </script>
+    <meta property="og:title" content="Test the Impact of Hyperparameter Changes" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://tutorials.inductiva.ai/generating-synthetic-data/synthetic-data-generation-5.html" />
+<meta property="og:site_name" content="Inductiva.ai Tutorials" />
+<meta property="og:description" content="In the preceding step of our tutorial, we used Inductiva’s Templating Engine. to generalize the physical properties and initial conditions of the fluid block in our “base case” simulation. By subst..." />
+<meta property="og:image" content="https://tutorials.inductiva.ai/_static/inductiva-social-banner.jpg" />
+<meta property="og:image:alt" content="Inductiva.ai Tutorials" />
+
+    <title>Test the Impact of Hyperparameter Changes &#8212; Inductiva API Python client  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'generating-synthetic-data/synthetic-data-generation-5';</script>
+    <link rel="canonical" href="https://tutorials.inductiva.ai/generating-synthetic-data/synthetic-data-generation-5.html" />
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Benchmark Computational Resources" href="synthetic-data-generation-6.html" />
+    <link rel="prev" title="Generalize the “Base Case” Physical Parameters" href="synthetic-data-generation-4.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/inductiva-logo-black.svg" class="logo__image only-light" alt="Inductiva API Python client  documentation - Home"/>
+    <script>document.write(`<img src="../_static/inductiva-logo-white.svg" class="logo__image only-dark" alt="Inductiva API Python client  documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Generating Synthetic Data</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="synthetic-data-generation-1.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthetic-data-generation-2.html">Set Up the “Base Case”</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthetic-data-generation-3.html">Choose the Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthetic-data-generation-4.html">Generalize the “Base Case” Physical Parameters</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Test the Impact of Hyperparameter Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthetic-data-generation-6.html">Benchmark Computational Resources</a></li>
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/generating-synthetic-data/synthetic-data-generation-5.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Test the Impact of Hyperparameter Changes</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generalizing-the-particle-radius">Generalizing the <code class="docutils literal notranslate"><span class="pre">Particle</span> <span class="pre">Radius</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-templated-simulation">Running the Templated Simulation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#impact-of-particle-radius-on-simulation-volume-and-data-output">Impact of Particle Radius on Simulation Volume and Data Output</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-and-cost-analysis-across-machine-configurations">Performance and Cost Analysis Across Machine Configurations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#up-next-benchmarking-computational-resources">Up Next: Benchmarking Computational Resources</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="test-the-impact-of-hyperparameter-changes">
+<h1>Test the Impact of Hyperparameter Changes<a class="headerlink" href="#test-the-impact-of-hyperparameter-changes" title="Permalink to this heading">#</a></h1>
+<p>In the preceding step of our tutorial, we used Inductiva’s <a class="reference external" href="https://docs.inductiva.ai/en/latest/explore_api/templating.html" target="_blank">Templating Engine</a>.
+to generalize the physical properties and initial conditions of the fluid block
+in our “base case” simulation. By substituting certain values in our configuration
+file with placeholders, we enabled the template to incorporate assigned values,
+enabling programmable adjustments of each variable via our Python script.</p>
+<p>Now, we will move on to the hyperparameters of our simulation, which are important
+due to their influence on both the fidelity of the simulation and the associated
+computational requirements and costs. Among various hyperparameters, we will specifically
+focus on adjusting the <em><strong>particle radius</strong></em> value and how it affects computational
+costs and data output. To illustrate this, we will run four simulations with decreasing
+particle radii while keeping the remaining parameters fixed to understand
+these impacts better.</p>
+<section id="generalizing-the-particle-radius">
+<h2>Generalizing the <code class="docutils literal notranslate"><span class="pre">Particle</span> <span class="pre">Radius</span></code><a class="headerlink" href="#generalizing-the-particle-radius" title="Permalink to this heading">#</a></h2>
+<p>Using the same methodology from our previous step, we will substitute the categorical
+and numerical value of the <code class="docutils literal notranslate"><span class="pre">particle</span> <span class="pre">radius</span></code> hyperparameter in the <code class="docutils literal notranslate"><span class="pre">.JSON</span></code> configuration
+file we previously downloaded with a templated variable:</p>
+<p><em><code class="docutils literal notranslate"><span class="pre">{%</span> <span class="pre">raw</span> <span class="pre">%}{{</span> <span class="pre">variable_name</span> <span class="pre">}}{%</span> <span class="pre">endraw</span> <span class="pre">%}</span></code></em></p>
+<p>Here’s what our templated configuration file looks like, where we’ve kept all
+hyperparameters fixed except for the particle radius:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&quot;Configuration&quot;: {
+    &quot;stopAt&quot;: 1,
+    &quot;timeStepSize&quot;: 0.001,
+    &quot;particleRadius&quot;: {{ particle_radius | default(0.008) }},
+    &quot;simulationMethod&quot;: 4,
+    &quot;boundaryHandlingMethod&quot;: 0,
+    &quot;kernel&quot;: 1,
+    &quot;cflMethod&quot;: 1,
+    &quot;cflFactor&quot;: 0.5,
+    &quot;cflMinTimeStepSize&quot;: 0.0001,
+    &quot;cflMaxTimeStepSize&quot;: 0.005,
+    &quot;gravitation&quot;: [0, 0, -9.81],
+    &quot;gradKernel&quot;: 1,
+    &quot;enableVTKExport&quot;: true,
+    &quot;dataExportFPS&quot;: 60,
+    &quot;particleAttributes&quot;: &quot;velocity;density&quot;
+}
+</pre></div>
+</div>
+<p>Now, let’s save the <code class="docutils literal notranslate"><span class="pre">.JSON</span></code> file in the local directory, within the download folder,
+to prepare for running the simulation.</p>
+</section>
+<section id="running-the-templated-simulation">
+<h2>Running the Templated Simulation<a class="headerlink" href="#running-the-templated-simulation" title="Permalink to this heading">#</a></h2>
+<p>After updating our configuration file, we’re ready to run simulations with different
+particle sizes. We will invoke the below Python script to set up a group of machines
+for the simulations and initialize our templating engine to easily fill in the
+<code class="docutils literal notranslate"><span class="pre">particle</span> <span class="pre">size</span></code> variable values. We’re testing four sizes: <strong>0.01, 0.008, 0.006, and 0.004 meters.</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="kn">import</span> <span class="nn">inductiva</span>
+
+<span class="c1"># Launch a machine group with a c3-standard-4</span>
+<span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span><span class="s2">&quot;c3-standard-4&quot;</span><span class="p">)</span>
+<span class="n">machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># Assuming the template folder was downloaded to the local directory,</span>
+<span class="c1"># set the path to it.</span>
+<span class="n">template_dir</span> <span class="o">=</span> <span class="s2">&quot;./splishsplash-template-dir&quot;</span>
+
+<span class="c1"># Define the radii of the particles</span>
+<span class="n">particle_radii</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.008</span><span class="p">,</span> <span class="mf">0.006</span><span class="p">,</span> <span class="mf">0.004</span><span class="p">]</span>
+
+<span class="n">tasks_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># Initialize the templating engine</span>
+<span class="n">template_manager</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">TemplateManager</span><span class="p">(</span><span class="n">template_dir</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">radius</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">particle_radii</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="c1"># set the output directory to a different folder for each simulation</span>
+    <span class="c1"># and render the entire content of the template directory with the</span>
+    <span class="c1"># particle radius set to the current value</span>
+    <span class="n">template_manager</span><span class="o">.</span><span class="n">set_root_dir</span><span class="p">(</span><span class="s2">&quot;splishsplash-hyperparameter-search_</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">template_manager</span><span class="o">.</span><span class="n">render_dir</span><span class="p">(</span><span class="n">particle_radius</span><span class="o">=</span><span class="n">radius</span><span class="p">)</span>
+
+    <span class="n">task</span> <span class="o">=</span> <span class="n">SPlisHSPlasH</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="n">template_manager</span><span class="o">.</span><span class="n">get_root_dir</span><span class="p">(),</span>
+                            <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;config.json&quot;</span><span class="p">,</span>
+                            <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
+    <span class="n">tasks_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+
+</pre></div>
+</div>
+<p>For each particle size, our API creates a new folder, updates the settings with
+the new size, and starts the simulation. This lets us run all four simulations at
+the same time, making it faster to see how changing the particle size affects the
+results.</p>
+<p>Instead of waiting for each simulation to complete within the running script,
+we can track their progress and collect the results afterwards using our <a class="reference external" href="https://docs.inductiva.ai/en/latest/cli/cli-overview.html" target="_blank">Command Line Interface (CLI)</a>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Monitor the status of the tasks every 10 seconds</span>
+$<span class="w"> </span>inductiva<span class="w"> </span>task<span class="w"> </span>list<span class="w"> </span>-n<span class="w"> </span><span class="m">4</span><span class="w"> </span>--watch<span class="w"> </span><span class="m">10</span>
+
+<span class="c1"># Download the results of the tasks</span>
+$<span class="w"> </span>inductiva<span class="w"> </span>storage<span class="w"> </span>list<span class="w"> </span>-m<span class="w"> </span><span class="m">4</span>
+</pre></div>
+</div>
+</section>
+<section id="impact-of-particle-radius-on-simulation-volume-and-data-output">
+<h2>Impact of Particle Radius on Simulation Volume and Data Output<a class="headerlink" href="#impact-of-particle-radius-on-simulation-volume-and-data-output" title="Permalink to this heading">#</a></h2>
+<p>The table below shows how the different particle radius values we’ve chosen affect
+the total number of particles and the amount of data generated. As we decrease
+the particle radius, we need more particles for the simulation, increasing the
+data volume. Specifically, halving the particle radius results in an eightfold
+increase in the number of particles and the data produced, due to the volume
+scaling with the cube of the particle radius ($$r_{particle}{^3}$$).</p>
+<p><span class="mt-0 block sm:text-left text-base"><strong>Table 1.</strong> Number
+of particles and total size of simulation output for each particle radius.</span></p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Particle Radius</p></th>
+<th class="head"><p>Total N. of Particles</p></th>
+<th class="head"><p>Size of data produced</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0.01</p></td>
+<td><p>15625</p></td>
+<td><p>166 MB</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.008</p></td>
+<td><p>29791</p></td>
+<td><p>213 MB</p></td>
+</tr>
+<tr class="row-even"><td><p>0.006</p></td>
+<td><p>73720</p></td>
+<td><p>525 MB</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.004</p></td>
+<td><p>244584</p></td>
+<td><p>1.76 GB</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="performance-and-cost-analysis-across-machine-configurations">
+<h2>Performance and Cost Analysis Across Machine Configurations<a class="headerlink" href="#performance-and-cost-analysis-across-machine-configurations" title="Permalink to this heading">#</a></h2>
+<p>Reducing the particle radius naturally results in a higher number of particles
+required for the simulation to run, and this demands more computing power.
+While upgrading to more powerful machines can reduce computational times, it also
+incurs significantly higher costs. To better understand these factors, we’ve run
+our simulations across various machine configurations. The resulting data, shown
+in the tables below, outlines runtime and costs for our four simulations
+on three different machine types:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">c3-standard-4</span></code> at <strong>$0.23 per hour</strong></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c3-standard-8</span></code> at <strong>$0.459 per hour</strong></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c3-standard-88</span></code> at <strong>$5.053 per hour</strong></p></li>
+</ul>
+<p><span class="mt-0 block sm:text-left text-base"><strong>Table 2.</strong>
+Simulation runtimes and costs on a <code class="docutils literal notranslate"><span class="pre">c3-standard-4</span></code> machine, priced at $0.23 per
+hour, as performed via the Inductiva API.</span></p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Particle Radius</p></th>
+<th class="head"><p>Time to run</p></th>
+<th class="head"><p>Cost in $</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0.01</p></td>
+<td><p>16m31s</p></td>
+<td><p>0.06</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.008</p></td>
+<td><p>27m11s</p></td>
+<td><p>0.10</p></td>
+</tr>
+<tr class="row-even"><td><p>0.006</p></td>
+<td><p>56m59s</p></td>
+<td><p>0.22</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.004</p></td>
+<td><p>6h11m27s</p></td>
+<td><p>1.42</p></td>
+</tr>
+</tbody>
+</table>
+<p><span class="mt-0 block sm:text-left text-base"><strong>Table 3.</strong>
+Simulation runtimes and costs on a <code class="docutils literal notranslate"><span class="pre">c3-standard-8</span></code> machine, priced at $0.459 per
+hour, as performed via the Inductiva API.</span></p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Particle Radius</p></th>
+<th class="head"><p>Time to run</p></th>
+<th class="head"><p>Cost in $</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0.01</p></td>
+<td><p>9m38s</p></td>
+<td><p>0.07</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.008</p></td>
+<td><p>15m11s</p></td>
+<td><p>0.12</p></td>
+</tr>
+<tr class="row-even"><td><p>0.006</p></td>
+<td><p>35m34s</p></td>
+<td><p>0.27</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.004</p></td>
+<td><p>3h28m31s</p></td>
+<td><p>1.60</p></td>
+</tr>
+</tbody>
+</table>
+<p><span class="mt-0 block sm:text-left text-base"><strong>Table 4.</strong>
+Simulation runtimes and costs on a <code class="docutils literal notranslate"><span class="pre">c3-standard-88</span></code> machine, priced at $5.053 per
+hour, as performed via the Inductiva API.</span></p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Particle Radius</p></th>
+<th class="head"><p>Time to run</p></th>
+<th class="head"><p>Cost in $</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0.01</p></td>
+<td><p>3m27s</p></td>
+<td><p>0.29</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.008</p></td>
+<td><p>5m16s</p></td>
+<td><p>0.44</p></td>
+</tr>
+<tr class="row-even"><td><p>0.006</p></td>
+<td><p>8m20s</p></td>
+<td><p>0.70</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.004</p></td>
+<td><p>1h25m04s</p></td>
+<td><p>7.16</p></td>
+</tr>
+</tbody>
+</table>
+<p>Notice that choosing more powerful hardware does not correspondingly decrease
+computational times as much as it increases costs. Upgrading the virtual CPUs
+from 8 to 88 doesn’t proportionally reduce computational time 11-fold. <strong>On average, run times typically drop by only about a factor of 3, while costs soar by 5 times.</strong></p>
+</section>
+<section id="up-next-benchmarking-computational-resources">
+<h2>Up Next: Benchmarking Computational Resources<a class="headerlink" href="#up-next-benchmarking-computational-resources" title="Permalink to this heading">#</a></h2>
+<p>In this step, we assessed how adjusting hyperparameters, particularly the <code class="docutils literal notranslate"><span class="pre">particle</span> <span class="pre">radius</span></code>,
+impacts the computational times and costs of our “base case” simulation. We ran
+four simulations with increasingly smaller particle radii while keeping all other
+parameters fixed. This change naturally increased the number of particles needed
+to run the simulation and the amount of data it produced, which in turn demanded
+more computing power. Following this, we looked into how these changes influenced
+the cost and duration of computing by running the simulation across different
+hardware configurations.</p>
+<p>Performing such benchmarks becomes crucial for understanding the necessary trade-offs
+in synthetic data generation, especially considering the potential to scale up to
+10,000 simulations in a manner that is both time-efficient and cost-effective.
+If we revisit the <a class="reference external" href="https://arxiv.org/abs/2002.09405" target="_blank">study</a> we built upon for
+this tutorial, a higher particle count results in a larger graph, potentially
+complicating memory requirements for training graph neural networks (GNNs).
+In our next chapter, we’ll dive deeper into the computational costs and runtimes
+for such large scale-ups and learn how to efficiently benchmark computational resources.</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="synthetic-data-generation-4.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Generalize the “Base Case” Physical Parameters</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="synthetic-data-generation-6.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Benchmark Computational Resources</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generalizing-the-particle-radius">Generalizing the <code class="docutils literal notranslate"><span class="pre">Particle</span> <span class="pre">Radius</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-templated-simulation">Running the Templated Simulation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#impact-of-particle-radius-on-simulation-volume-and-data-output">Impact of Particle Radius on Simulation Volume and Data Output</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-and-cost-analysis-across-machine-configurations">Performance and Cost Analysis Across Machine Configurations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#up-next-benchmarking-computational-resources">Up Next: Benchmarking Computational Resources</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Inductiva Research Labs
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, Inductiva Research Labs.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

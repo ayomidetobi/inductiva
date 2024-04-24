@@ -1,0 +1,660 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<meta content="Explore available computational resources through the Inductiva API and learn how to choose more powerful hardware to run the 'base case'" name="description" />
+<meta content="Inductiva API, Programming, HPC, Simulation, Tutorial, Synthetic Data Generation, Physics-ML, SPH" name="keywords" />
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-188572165-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-188572165-1');
+    </script>
+    <meta property="og:title" content="Choose the Hardware" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://tutorials.inductiva.ai/generating-synthetic-data/synthetic-data-generation-3.html" />
+<meta property="og:site_name" content="Inductiva.ai Tutorials" />
+<meta property="og:description" content="In our previous step, we learned how to set up a “base case” simulation, building upon the study by Sanchez-Gonzalez et al. where a Graph Neural Network (GNN) is used to learn how to simulate fluid..." />
+<meta property="og:image" content="https://tutorials.inductiva.ai/_static/inductiva-social-banner.jpg" />
+<meta property="og:image:alt" content="Inductiva.ai Tutorials" />
+
+    <title>Choose the Hardware &#8212; Inductiva API Python client  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'generating-synthetic-data/synthetic-data-generation-3';</script>
+    <link rel="canonical" href="https://tutorials.inductiva.ai/generating-synthetic-data/synthetic-data-generation-3.html" />
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Generalize the “Base Case” Physical Parameters" href="synthetic-data-generation-4.html" />
+    <link rel="prev" title="Set Up the “Base Case”" href="synthetic-data-generation-2.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/inductiva-logo-black.svg" class="logo__image only-light" alt="Inductiva API Python client  documentation - Home"/>
+    <script>document.write(`<img src="../_static/inductiva-logo-white.svg" class="logo__image only-dark" alt="Inductiva API Python client  documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Generating Synthetic Data</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="synthetic-data-generation-1.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthetic-data-generation-2.html">Set Up the “Base Case”</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Choose the Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthetic-data-generation-4.html">Generalize the “Base Case” Physical Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthetic-data-generation-5.html">Test the Impact of Hyperparameter Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthetic-data-generation-6.html">Benchmark Computational Resources</a></li>
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/generating-synthetic-data/synthetic-data-generation-3.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Choose the Hardware</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#choosing-more-powerful-hardware">Choosing more Powerful Hardware</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#browsing-our-available-machines">Browsing our Available Machines</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-our-base-case-on-dedicated-machines">Running our “Base Case” on Dedicated Machines</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#up-next-generalizing-our-simulation-script-with-inductivas-templating-engine">Up Next: Generalizing our Simulation Script with Inductiva’s Templating Engine</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="choose-the-hardware">
+<h1>Choose the Hardware<a class="headerlink" href="#choose-the-hardware" title="Permalink to this heading">#</a></h1>
+<p>In our <a class="reference internal" href="synthetic-data-generation-2.html"><span class="doc std std-doc">previous step</span></a>,
+we learned how to set up a “base case” simulation, building upon the study by <a class="reference external" href="https://arxiv.org/abs/2002.09405" target="_blank">Sanchez-Gonzalez et al.</a> where a Graph Neural Network (GNN) is used to learn how to simulate fluid dynamics.
+Our “base case” simulated a 0.5m cube of water released from one of the top corners
+of a sealed 1m cubic box splashing against the box’s walls over a
+4-second duration.</p>
+<p>After our initial run of the “base case” simulation with a <em>0.01</em>
+particle radius and later adjusting the particle count to <em>0.008</em> to align with
+the research we’re basing this on, we noticed a much longer runtime — specifically,
+<strong>30 minutes for a single run simulating 4 seconds of fluid dynamics</strong>. This means
+that if we want to run 10,000 or even 20,000 different variations to generate a large
+enough dataset, we’d be facing thousands of hours in computation time, and utimately, a need for more
+powerful hardware. This time around, we’re looking at how to speed things up with
+beefier hardware through our API, and what that means in terms of costs. Stick around
+as we dive into choosing the right machine for the job and weigh out the price points.</p>
+<section id="choosing-more-powerful-hardware">
+<h2>Choosing more Powerful Hardware<a class="headerlink" href="#choosing-more-powerful-hardware" title="Permalink to this heading">#</a></h2>
+<p>When we submitted our “base case” simulation task, it was sent to what we call the “default queue”,
+a queue of tasks processed by a shared resource pool of virtual machines accessible to all
+API users. This default queue offers an easy and affordable way for users to
+prototype and run small-scale simulations similar to our initial low particle count
+simulation, without the hassle of managing resources. However, its shared nature
+and finite capacity mean that simulations, especially higher fidelity simulations,
+can take a long time to be picked up and to execute. This was evident when our
+enhanced simulation took 30 minutes to run on the default queue’s virtual
+machines (VMs), the slowest option available, due to their limited computational power.</p>
+<p>To speed up our simulation, our API provides a mechanism that allows us to <strong>launch dedicated machines</strong>
+exclusively for our projects. These dedicated machines can offer
+significantly more compute power compared to the standard options accessible through the
+default queue. By instantiating a MachineGroup, we now have the flexibility to
+choose the setup that aligns best with our simulation needs. This will make it
+easier for us to adjust our “base case” parameters, enhancing its resolution and
+increasing the particle count to align with the more complex scenarios described
+in the research we’re building upon.</p>
+<section id="browsing-our-available-machines">
+<h3>Browsing our Available Machines<a class="headerlink" href="#browsing-our-available-machines" title="Permalink to this heading">#</a></h3>
+<p>Our default queue uses virtual machines from the <code class="docutils literal notranslate"><span class="pre">c2</span></code> family, specifically <code class="docutils literal notranslate"><span class="pre">c2-standard-4.</span></code>
+These only have 4 vCPUs and will take a long time to compute complex simulations.
+To speed things up, the best way is to use our API to launch dedicated machines
+reserved for our exclusive use. Let’s explore our options for machine setups by
+running a simple command through the Inductiva <a class="reference external" href="https://docs.inductiva.ai/en/latest/cli/cli-overview.html" target="_blank">Command Line Interface (CLI)</a> tool:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>inductiva<span class="w"> </span>resources<span class="w"> </span>available
+<span class="go">Machine types provided in Google Cloud</span>
+
+<span class="go">c2: Intel Xeon Cascade Lake (2nd Gen) processor.</span>
+<span class="go">  &gt; c2-standard-  [2, 4, 8, 16, 30, 60]                         </span>
+
+<span class="go">c3: Intel Xeon Sapphire Rapids (4th Gen) processor.</span>
+<span class="go">  &gt; c3-highcpu-   [4, 8, 22, 44, 88, 176]                       </span>
+<span class="go">  &gt; c3-standard-  [4, 8, 22, 44, 88, 176]                       </span>
+<span class="go">  &gt; c3-highmem-   [4, 8, 22, 44, 88, 176]                       </span>
+
+<span class="go">h3: (Available Soon) Intel Xeon Sapphire Rapids (4th Gen) processor.</span>
+<span class="go">Simultaneous multithreading disabled, i.e., vCPU represents an entire core.</span>
+<span class="go">  &gt; h3-standard-  [88]                                          </span>
+
+<span class="go">c2d: AMD EPYC Milan (3rd Gen) processor.</span>
+<span class="go">  &gt; c2d-highcpu-  [2, 4, 8, 16, 32, 56, 112]                    </span>
+<span class="go">  &gt; c2d-standard- [2, 4, 8, 16, 32, 56, 112]                    </span>
+<span class="go">  &gt; c2d-highmem-  [2, 4, 8, 16, 32, 56, 112]                    </span>
+
+<span class="go">c3d: AMD EPYC Genoa (4th Gen) processor.</span>
+<span class="go">  &gt; c3d-highcpu-  [4, 8, 16, 30, 60, 90, 180, 360]              </span>
+<span class="go">  &gt; c3d-standard- [4, 8, 16, 30, 60, 90, 180, 360]              </span>
+<span class="go">  &gt; c3d-highmem-  [4, 8, 16, 30, 60, 90, 180, 360]              </span>
+
+<span class="go">e2: Intel Xeon (up to Skylake, 1st Gen) and AMD EPYC (up to Milan, 3rd Gen)</span>
+<span class="go">processors.</span>
+<span class="go">Automatically selected based on availability.</span>
+<span class="go">  &gt; e2-highcpu-   [2, 4, 8, 16, 32]                             </span>
+<span class="go">  &gt; e2-standard-  [2, 4, 8, 16, 32]                             </span>
+<span class="go">  &gt; e2-highmem-   [2, 4, 8, 16]                                 </span>
+
+<span class="go">n2: Intel Xeon Ice Lake and Cascade Lake processors (3rd and 2nd Gen).</span>
+<span class="go">Cascade Lake default up to 80 vCPUs and Ice Lake for larger machines.</span>
+<span class="go">  &gt; n2-highcpu-   [2, 4, 8, 16, 32, 48, 64, 80, 96]             </span>
+<span class="go">  &gt; n2-standard-  [2, 4, 8, 16, 32, 48, 64, 80, 96, 128]        </span>
+<span class="go">  &gt; n2-highmem-   [2, 4, 8, 16, 32, 48, 64, 80, 96, 128]        </span>
+
+<span class="go">n2d: AMD EPYC Milan or ROME processors (3rd and 2nd Gen).</span>
+<span class="go">  &gt; n2d-highcpu-  [2, 4, 8, 16, 32, 48, 64, 80, 96, 128, 224]   </span>
+<span class="go">  &gt; n2d-standard- [2, 4, 8, 16, 32, 48, 64, 80, 96, 128, 224]   </span>
+<span class="go">  &gt; n2d-highmem-  [2, 4, 8, 16, 32, 48, 64, 80, 96]             </span>
+
+<span class="go">n1: Intel Xeon (up to Skylake, 1st Gen) processor.</span>
+<span class="go">Automatically selected based on availability.</span>
+<span class="go">  &gt; n1-highcpu-   [1, 2, 4, 8, 16, 32, 64, 96]                  </span>
+<span class="go">  &gt; n1-standard-  [1, 2, 4, 8, 16, 32, 64, 96]                  </span>
+<span class="go">  &gt; n1-highmem-   [1, 2, 4, 8, 16, 32, 64, 96] </span>
+</pre></div>
+</div>
+</section>
+<section id="running-our-base-case-on-dedicated-machines">
+<h3>Running our “Base Case” on Dedicated Machines<a class="headerlink" href="#running-our-base-case-on-dedicated-machines" title="Permalink to this heading">#</a></h3>
+<p>We’ll run our “base case” with a <em>particle radius of 0.008</em> again, but now we’ll
+boost our computing power by scaling up the number of vCPUs in the <code class="docutils literal notranslate"><span class="pre">c2</span></code> family available
+in the default queue. We’re moving from the 4 vCPUs of the <code class="docutils literal notranslate"><span class="pre">c2-standard-4</span></code> to a
+much heftier <code class="docutils literal notranslate"><span class="pre">c2-standard-60</span></code> setup, allowing us to significantly increase processing
+power. This can easily be achieved with just a few extra lines of code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
+
+<span class="c1"># Configure and start a dedicated machine group</span>
+<span class="n">my_machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
+    <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c2-standard-60&quot;</span><span class="p">)</span>
+<span class="n">my_machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="n">input_dir</span> <span class="o">=</span> <span class="s2">&quot;splishsplash-base-dir&quot;</span>
+
+<span class="c1"># Set simulation input directory</span>
+<span class="n">splishsplash</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">SplishSplash</span><span class="p">()</span>
+
+<span class="n">task</span> <span class="o">=</span> <span class="n">splishsplash</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
+                        <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;config.json&quot;</span><span class="p">,</span>
+                        <span class="n">on</span><span class="o">=</span><span class="n">my_machine_group</span><span class="p">)</span>
+
+<span class="n">task</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+<span class="n">task</span><span class="o">.</span><span class="n">download_outputs</span><span class="p">()</span>
+
+<span class="c1"># Terminate the machine group</span>
+<span class="n">my_machine_group</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Notice the significant reduction in runtime for this simulation: down from 30m
+to just <strong>10m07s</strong>, achieving an approximately 3-fold increase in speed!</p>
+<p>Of course, we can enhance the performance further with more powerful machines equipped
+with the latest Intel Xeon CPUs, specifically the <code class="docutils literal notranslate"><span class="pre">c3</span></code> family. Configuring this
+in the Inductiva API is as straightforward as modifying a single argument in<br />
+the machine’s configuration:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Configure a dedicated machine from the c3 family boasting 88 vCPUs</span>
+<span class="n">my_machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
+    <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c3-standard-88&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This machine setup further reduces the simulation time to just <strong>5m46s</strong>, achieving
+a significant 1.75x speed-up over the <code class="docutils literal notranslate"><span class="pre">c2-standard-60</span></code> setup.</p>
+<p>Of course, there’s a catch: these exclusive machines have a non-negligible price per
+hour. It’s important to consider the cost of using these exclusive, more powerful
+machines. At the time of writing, the cost per hour for the <code class="docutils literal notranslate"><span class="pre">c2-standard-60</span></code> is $3.446,
+and for the more powerful <code class="docutils literal notranslate"><span class="pre">c3-standard-88</span></code>, it’s $5.053, compared to only $0.23
+per hour for the <code class="docutils literal notranslate"><span class="pre">c2-standard-4</span></code> used in the default queue. While we aim for
+efficiency and speed, we must also be mindful of the price, as it directly influences
+the overall cost of generating our dataset.</p>
+<p>In the following table, we can see a snapshot of how different machine configurations impact
+both performance and cost.</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Machine Type</p></th>
+<th class="head"><p>Time to run</p></th>
+<th class="head"><p>Hourly rate</p></th>
+<th class="head"><p>Total Cost</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">c2-standard-4</span></code></p></td>
+<td><p>29m27s</p></td>
+<td><p>0.23 $</p></td>
+<td><p>0.11 $</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">c2-standard-60</span></code></p></td>
+<td><p>10m07s</p></td>
+<td><p>3.446 $</p></td>
+<td><p>0.58 $</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">c3-standard-88</span></code></p></td>
+<td><p>5m46s</p></td>
+<td><p>5.053 $</p></td>
+<td><p>0.49 $</p></td>
+</tr>
+</tbody>
+</table>
+<p>While the <code class="docutils literal notranslate"><span class="pre">c2-standard-4</span></code> machine offers the lowest cost, it takes much longer
+to compute, making it an economical choice for less demanding tasks. On the
+other hand, the <code class="docutils literal notranslate"><span class="pre">c3</span></code> machine category stands out for its fast performance, though
+it comes at a price approximately four times higher than that of the <code class="docutils literal notranslate"><span class="pre">c2-standard-4</span></code>.
+This preliminary comparison offers a peak into a more detailed analysis in
+upcoming tutorials, where we will delve further into optimizing the trade-off
+between simulation speed and operational costs.</p>
+</section>
+</section>
+<section id="up-next-generalizing-our-simulation-script-with-inductivas-templating-engine">
+<h2>Up Next: Generalizing our Simulation Script with Inductiva’s Templating Engine<a class="headerlink" href="#up-next-generalizing-our-simulation-script-with-inductivas-templating-engine" title="Permalink to this heading">#</a></h2>
+<p>In this step, we touched on the importance of choosing the right machine
+setup and how cost considerations play a crucial role. However, this can become
+quite challenging when we start manipulating some of the hyperparameters of the
+simulator without manually tweaking them to find the best dataset generation method.</p>
+<p>In the [next phase]({% post_url 2024-03-24-api-synthetic-data-generation-4 %}) of
+this tutorial, we will transform our “base case” simulation configuration files into
+a “programmable script” by using Inductiva’s <a class="reference external" href="https://docs.inductiva.ai/en/latest/explore_api/templating.html" target="_blank">Templating Engine</a>.
+This script will enable us to programmatically simulate all sorts of variations
+of the base case, each with unique parameter and hyperparameter settings, all through
+Python scripting!</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="synthetic-data-generation-2.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Set Up the “Base Case”</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="synthetic-data-generation-4.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Generalize the “Base Case” Physical Parameters</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#choosing-more-powerful-hardware">Choosing more Powerful Hardware</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#browsing-our-available-machines">Browsing our Available Machines</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-our-base-case-on-dedicated-machines">Running our “Base Case” on Dedicated Machines</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#up-next-generalizing-our-simulation-script-with-inductivas-templating-engine">Up Next: Generalizing our Simulation Script with Inductiva’s Templating Engine</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Inductiva Research Labs
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, Inductiva Research Labs.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

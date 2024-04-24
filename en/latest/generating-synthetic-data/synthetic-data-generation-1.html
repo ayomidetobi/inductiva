@@ -1,0 +1,598 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<meta content="Learn how to generate large-scale synthetic datasets for Physics-ML models using the Inductiva API, starting with our unique data generation recipe." name="description" />
+<meta content="Inductiva API, Programming, HPC, Simulation, Tutorial, Synthetic Data Generation, Physics-ML, SPH" name="keywords" />
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-188572165-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-188572165-1');
+    </script>
+    <meta property="og:title" content="Introduction" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://tutorials.inductiva.ai/generating-synthetic-data/synthetic-data-generation-1.html" />
+<meta property="og:site_name" content="Inductiva.ai Tutorials" />
+<meta property="og:description" content="How can we train machine learning models to design airfoils for the next generation of hypersonic planes, optimize the shape of rotor blades for helicopters destined to fly on Mars, or even predict..." />
+<meta property="og:image" content="https://tutorials.inductiva.ai/_static/inductiva-social-banner.jpg" />
+<meta property="og:image:alt" content="Inductiva.ai Tutorials" />
+
+    <title>Introduction &#8212; Inductiva API Python client  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'generating-synthetic-data/synthetic-data-generation-1';</script>
+    <link rel="canonical" href="https://tutorials.inductiva.ai/generating-synthetic-data/synthetic-data-generation-1.html" />
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Set Up the “Base Case”" href="synthetic-data-generation-2.html" />
+    <link rel="prev" title="Tutorials" href="../index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/inductiva-logo-black.svg" class="logo__image only-light" alt="Inductiva API Python client  documentation - Home"/>
+    <script>document.write(`<img src="../_static/inductiva-logo-white.svg" class="logo__image only-dark" alt="Inductiva API Python client  documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Generating Synthetic Data</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthetic-data-generation-2.html">Set Up the “Base Case”</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthetic-data-generation-3.html">Choose the Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthetic-data-generation-4.html">Generalize the “Base Case” Physical Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthetic-data-generation-5.html">Test the Impact of Hyperparameter Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthetic-data-generation-6.html">Benchmark Computational Resources</a></li>
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/generating-synthetic-data/synthetic-data-generation-1.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Introduction</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva-s-recipe-to-generate-synthetic-data-for-physics-ml">Inductiva’s Recipe to Generate Synthetic Data for Physics-ML</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#synthetic-data-for-learning-to-simulate-complex-physics-a-practical-study">Synthetic Data for Learning to Simulate Complex Physics: A Practical Study</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#up-next-setting-up-our-base-case-simulation">Up Next: Setting Up our “Base Case” Simulation</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h1>
+<p>How can we train machine learning models to design airfoils for the next
+generation of hypersonic planes, optimize the shape of rotor blades for
+helicopters destined to fly on Mars, or even predict the interactions between
+non-existing molecules and target proteins in drug design, without enough
+observational data?</p>
+<p>Synthetic data emerges as a solution that addresses the challenge of data
+scarcity for training Physics-ML models. Synthetic data generation allows us to
+complement or even entirely replace the gaps left by the lack of observational
+data with synthetic equivalents. By simulating target systems across a spectrum
+of conditions and variations, we can generate diverse and large enough
+quantities of synthetic data to train robust Physics-ML models of high accuracy
+and strong generalization capabilities. However, we recognize the practical
+difficulties and potential expenses associated with generating large and diverse
+datasets through simulation, and that’s why our Inductiva API stands out as your
+go-to tool to make this process more accessible and cost-friendly.</p>
+<p>In this tutorial series we’ll show you how to use the Inductiva API to generate
+synthetic data crucial for training Physics-ML models, at scale. In this
+introduction, we’re going to let you in on our very own recipe for generating
+synthetic data at scale, giving you an overview of the whole process building on
+an example from a published study. Over the next steps of this tutorial series,
+we’ll break it all down to show you how it’s done. This guide is a resource for
+both machine learning engineers and enthusiasts alike with a thorough
+understanding of Physics-ML and simulation software.</p>
+<section id="inductiva-s-recipe-to-generate-synthetic-data-for-physics-ml">
+<h2>Inductiva’s Recipe to Generate Synthetic Data for Physics-ML<a class="headerlink" href="#inductiva-s-recipe-to-generate-synthetic-data-for-physics-ml" title="Permalink to this heading">#</a></h2>
+<p>Generating synthetic data with the Inductiva API is pretty straightforward and
+involves just four steps. From developing an initial simulation model for the
+“base case” you wish to study, to running its corresponding simulator across a
+number of variations, by the end you’ll have a comprehensive and diverse dataset
+ready for training ML models.</p>
+<p>Our recipe goes as follows:</p>
+<ol class="arabic simple">
+<li><p><strong>Set Up the Base Case:</strong> We begin with preparing the configuration files for
+a “base case” simulation model of the system under study. <em>This step demands
+a thorough understanding of the system and simulation software, often requiring
+collaboration with specialists in the field. Machine learning engineers will
+likely need to partner with domain experts, such as computational chemists or
+mechanical engineers, who have experience with specific simulation software. Our
+API currently supports a growing range of
+<a class="reference external" href="https://docs.inductiva.ai/en/latest/simulators/overview.html" target="_blank">simulators</a>
+covering diverse simulation needs.</em></p></li>
+<li><p><strong>Generalize the Base Case:</strong> Next, we transform our “base case” model into a
+template that can generate numerous case variations. <em>Configuration files
+typically model a specific instance of the system with hard-coded values to
+describe its parameters. To achieve a dataset rich in diversity and volume, we
+need to “generalize” these configuration files in such a way that could be used
+to describe relevant variations of the base case. Our <a class="reference external" href="https://docs.inductiva.ai/en/latest/explore_api/templating.html" target="_blank">templating
+mechanism</a>
+elegantly replaces fixed values in our configuration files with variables. This
+means we can easily tweak these variables through Python scripting later on.
+It’s a game-changer, allowing us to cover our simulation’s parameter space
+thoroughly for both exhaustive or random variation runs.</em></p></li>
+<li><p><strong>Benchmark Computational Resources:</strong> Next, we benchmark and assess the
+computational performance and costs associated with running variations of our
+“base case” across different hardware and at different levels of fidelity.
+<em>Running a large number of high-fidelity simulations can be costly, which is why
+we find balancing data resolution against generation time and costs a crucial
+step before generating this data at scale. Our API provides all the tools needed
+for this benchmarking process with only a few lines of code.</em></p></li>
+<li><p><strong>Generate Synthetic Data in Bulk:</strong> Finally, we use our API to fire up
+hundreds of cloud machines, running thousands of variations of our “base
+case”. Once the simulations complete, we collect the output data for
+post-processing. And just like that, we’re all set!</p></li>
+</ol>
+<p>Best of all, our API makes it easy to manage our simulations, from listing
+resources, to streaming task logs in real-time, even while they’re running
+remotely, using our <a class="reference external" href="https://docs.inductiva.ai/en/latest/cli/cli-overview.html" target="_blank">command line interface
+(CLI)</a></p>
+<p>We’ll get into the details of each of these steps in the coming posts of this
+tutorial series. But first, let’s take a look at a study done by a group of
+researchers who used data generated from Smoothed Particle Hydrodynamics (SPH)
+solvers to train a Graph Neural Network (GNN) model.</p>
+</section>
+<section id="synthetic-data-for-learning-to-simulate-complex-physics-a-practical-study">
+<h2>Synthetic Data for Learning to Simulate Complex Physics: A Practical Study<a class="headerlink" href="#synthetic-data-for-learning-to-simulate-complex-physics-a-practical-study" title="Permalink to this heading">#</a></h2>
+<p>Let’s take a closer look at a practical application of synthetic datasets
+through this comprehensive <a class="reference external" href="https://arxiv.org/abs/2002.09405" target="_blank">study by Sanchez-Gonzalez et
+al.</a>. The researchers explore how a Graph
+Neural Networks (GNNs) model, trained on synthetic data generated from Smoothed
+Particle Hydrodynamics (SPH) solvers, can be applied to simulate fluid dynamics
+without learning the laws governing such phenomenon.</p>
+<p>The research abstract points out:</p>
+<blockquote>
+<div><p>This work uses a state-of-the-art deep learning model to learn the dynamics of
+fluids
+and to simulate how they flow without the need for solving the physics equations
+that govern the phenomenon. The proposed model is based on a Graph Network
+architecture, which takes as input a graph whose nodes represent fluid particles
+and edges physical interactions among them. The model performs sequential steps
+of computations involving the nodes that are connected by edges to predict how
+the fluid flows. (…) The model is trained on data generated with Smoothed
+Particle Hydrodynamics, a Lagrangian method in Computational Fluid Dynamics that
+simulates fluids as a set of particles.</p>
+</div></blockquote>
+<p>Smoothed Particle Hydrodynamics (SPH), stands out for its mesh-free approach
+that models fluid flows by allowing coordinates to move along with the fluid. It
+is widely celebrated for its ability to simulate exceptionally realistic fluid
+dynamics, such as those we see in cinematic visual effects.</p>
+<p>However, the researchers behind this study consider a much simpler simulation
+case: modeling the behavior of a 3D fluid block, made up of many tiny uniformly
+dense particles all packed together in a cube shape, suspended in mid-air and
+left to fall under the effect of gravity inside a box. As the simulation
+progresses, the fluid block collides with the walls of the box, resulting in
+complex fluid behaviors and surface patterns.</p>
+<div style="display: flex; justify-content:center">
+<video width=500 loop muted autoplay preload="auto">
+<source src="../_static/generating-synthetic-data/dambreak.mp4" type="video/mp4">
+</video>
+</div>
+<p>Video 1: Dynamics of a water block simulated with 32984 SPH
+particles. Here, the block is left under the effect of gravity - <em>splash!</em>
+Simulation performed via Inductiva API.</p>
+<p>The core challenge here lies in training a Physics-ML model to predict the
+velocity of each fluid particle over time while adhering to the laws of fluid
+dynamics that are not explicitly encoded within the ML model. This challenge
+involves generalizing the model’s predictive capabilities across various
+conditions, like different container geometries or different fluid properties
+such as viscosity.</p>
+<p>Synthetic data helps us teach machine learning models without needing real-world
+data for every scenario, and without directly embedding the physical law for it.
+Instead, we use physical simulators that mimic real-world dynamics under various
+simulated conditions to produce data that inherently reflects these laws,
+helping the model learn on its own. This tutorial series will walk you through
+the process of generating such synthetic training datasets to enable your ML
+models to learn complex physics with ease.</p>
+</section>
+<section id="up-next-setting-up-our-base-case-simulation">
+<h2>Up Next: Setting Up our “Base Case” Simulation<a class="headerlink" href="#up-next-setting-up-our-base-case-simulation" title="Permalink to this heading">#</a></h2>
+<p>In the [next chapter]({% post_url 2024-03-13-api-synthetic-data-generation-2</p>
+<p>synthetic data at scale and affordably using our Inductiva API. We will teach
+you how to create a “base case” using SPlisHSPlasH, a popular open-source SPH
+simulator integrated within our API. This is just the beginning of generating
+the large, diverse synthetic data you need for your machine learning projects by
+making the most of Inductiva’s powerful tools.</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Tutorials</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="synthetic-data-generation-2.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Set Up the “Base Case”</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva-s-recipe-to-generate-synthetic-data-for-physics-ml">Inductiva’s Recipe to Generate Synthetic Data for Physics-ML</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#synthetic-data-for-learning-to-simulate-complex-physics-a-practical-study">Synthetic Data for Learning to Simulate Complex Physics: A Practical Study</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#up-next-setting-up-our-base-case-simulation">Up Next: Setting Up our “Base Case” Simulation</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Inductiva Research Labs
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, Inductiva Research Labs.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

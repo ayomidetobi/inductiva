@@ -1,0 +1,886 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<meta content="Inductiva API, Programming, HPC, Simulation" name="keywords" />
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-188572165-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-188572165-1');
+    </script>
+    <meta property="og:title" content="Benchmark Computational Resources" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://tutorials.inductiva.ai/generating-synthetic-data/synthetic-data-generation-6.html" />
+<meta property="og:site_name" content="Inductiva.ai Tutorials" />
+<meta property="og:description" content="In the previous step of this tutorial, we used Inductiva’s templating mechanism to transform the configuration files for our base case simulation into a generalized file whose parameters we could p..." />
+<meta property="og:image" content="https://tutorials.inductiva.ai/_static/inductiva-social-banner.jpg" />
+<meta property="og:image:alt" content="Inductiva.ai Tutorials" />
+<meta name="description" content="In the previous step of this tutorial, we used Inductiva’s templating mechanism to transform the configuration files for our base case simulation into a generalized file whose parameters we could p..." />
+
+    <title>Benchmark Computational Resources &#8212; Inductiva API Python client  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'generating-synthetic-data/synthetic-data-generation-6';</script>
+    <link rel="canonical" href="https://tutorials.inductiva.ai/generating-synthetic-data/synthetic-data-generation-6.html" />
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Test the Impact of Hyperparameter Changes" href="synthetic-data-generation-5.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/inductiva-logo-black.svg" class="logo__image only-light" alt="Inductiva API Python client  documentation - Home"/>
+    <script>document.write(`<img src="../_static/inductiva-logo-white.svg" class="logo__image only-dark" alt="Inductiva API Python client  documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Generating Synthetic Data</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="synthetic-data-generation-1.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthetic-data-generation-2.html">Set Up the “Base Case”</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthetic-data-generation-3.html">Choose the Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthetic-data-generation-4.html">Generalize the “Base Case” Physical Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthetic-data-generation-5.html">Test the Impact of Hyperparameter Changes</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Benchmark Computational Resources</a></li>
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/generating-synthetic-data/synthetic-data-generation-6.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Benchmark Computational Resources</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Benchmark Computational Resources</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#assessing-the-impact-of-changing-simulation-hyperparameters">Assessing the impact of changing simulation hyperparameters</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#choosing-the-best-vm-for-the-job">Choosing the best VM for the job</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#spot-instances-one-more-cost-saving-strategy">Spot Instances: one more cost saving strategy</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#varying-the-particle-radius">Varying the particle radius</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#varying-simulation-time">Varying simulation time</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#varying-time-step-interval">Varying time step interval</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="benchmark-computational-resources">
+<h1>Benchmark Computational Resources<a class="headerlink" href="#benchmark-computational-resources" title="Permalink to this heading">#</a></h1>
+<p>In the previous step of this tutorial, we used Inductiva’s templating mechanism to
+transform the configuration files for our base case simulation into a generalized
+file whose parameters we could programmatically change. This way, we can systematically
+produce many variations of the base case we are interested in so that we can then
+simulate to generate a diverse enough dataset for training our ML models. The
+parameters that we transformed into variables were the dimensions, initial position and
+initial velocity of the fluid block, as well as the density and viscosity of the fluid
+itself. These parameters control the core physical aspects of the simulation, and we
+will need to cover a wide range of values over these parameters to create a rich
+dataset.</p>
+<p>Additionally, we also generalized a few hyperparameters that control how the simulation is performed and the level of fidelity, namely: <em><strong>particle radius</strong></em>.</p>
+<ul class="simple">
+<li><p>How much simulation time do we want to generate (e.g. 5 seconds of fluid splashing)?</p></li>
+<li><p>How small are the particles that we use to represent the fluid?</p></li>
+</ul>
+<p>These hyperparameters are not related to the physical aspects of the simulation and
+only affect the underlying algorithm to improve the numerical stability and resolution.
+Hence, they have a deep impact on how much computing power is required for running a
+simulation. They also affect the amount of data that each simulation run produces. So,
+from a practical standpoint, and assuming that we have a fixed budget for investing in
+the generation of data (e.g. 1000$ to cover the compute costs), the way we set these
+hyperparameters determines how many simulations we will be able to run and
+how long we will wait until the desired data becomes available.</p>
+<p>Remember that we had concluded that the choice of the machines has an impact on
+how fast the simulation would run, and how much that simulation would cost. So, besides
+the need to assess the impact of the hyperparameters in the computational cost of the
+simulation, we will also need to see if we can optimize the machine type. That’s a lot
+of variables to play with. But first, let’s study the impact of the hyperparameters on
+the running time of a simulation.</p>
+</section>
+<section id="assessing-the-impact-of-changing-simulation-hyperparameters">
+<h1>Assessing the impact of changing simulation hyperparameters<a class="headerlink" href="#assessing-the-impact-of-changing-simulation-hyperparameters" title="Permalink to this heading">#</a></h1>
+<p>Here, we will study varying the number of each of the hyperparameters separately, to see how they impact the total running time of the simulation. Of the 2 hyperparameters, the size of the particles is the one that should affect the simulation time the most: the smaller the particle size, the larger the number of particles. Observe that, to fill the same volume, the number of particles grows cubically as their size shrinks. This also means that the amount of information to process and update grows cubically as the particle size is reduced. Let’s start by testing that, and we can do it using the Inductiva API with a simple for loop. We will keep the amount of simulation time fixed (4 secs). Here is the code:</p>
+<p>And these are the results:</p>
+<p>[Sérgio acho que podemos pegar numa máquina boa, high-cpu com um bom número de cores e correr para uns 10 ou 15 valores de particle size, se calhar em escala logarítmica…
+No paper eles usaram simulacoes com varios tamanhos, mas a maior tinha 20k, por isso acho que devemos escolher um particle size que nao nos deixe ir muito acima. Na verdade, se for muito maior depois o utilizador final teria problemas em usar GPUs para treinar GNN.</p>
+<p>Acho que tb basta 5 segundos de tempo simulado] [temos info sobre o número de partículas usadas em cada simulação? se sim era fixe tb ter isso no gráfico. Não sei se é propriedade que fica acessível só nos logs. Valeria a pena que isso ficasse disponível num (sub)campo do objecto task?]</p>
+<p>So, as we can see, the computation times grow pretty quickly. And the prices for each simulation go up accordingly. If we run simulations with a particle size of XX (quite small, high fidelity), we should expect them to cost XX using the chosen hardware. Therefore, using our budget, we will only be able to run XXX simulations. This is not a lot if we think about the number of parameters relevant to the physical properties of the use case that we can play with. As we will see later, there is a smart way of saving costs, but let’s proceed with studying the other hyperparameters.</p>
+<p>Using very similar code, we can also study the the impact of changing the time step from 0.001 to 0.05 (in logarithmic scale):</p>
+<p>And finally, here is the impact of changing the total simulated time, linearly, from 1 to 10 seconds:</p>
+<p>So, clearly, the most significant hyperparameter at play is the particle size. Let’s start by finding a good compromise on that one. First let’s remember that in the work by Sanchez-Gonzalez et al. [https://arxiv.org/abs/2002.09405], the simulation used as training data with the largest number of particles had 20k particles (see Appendix B.1). But most simulations were actually much smaller, in the range 1k to 8k. So, if we want to limit ourselves approximately to that range, and even considering that the size of the fluid block can be bigger that the one we are testing now (remember the user the current dimensions), we can keep particle size at XX.</p>
+<p>Also, in the same work, the time step chosen was 2.5 ms, generating 400 data frames per second of simulation. We see that, on the time step scale of 1 ms to 5 ms, the simulation time grows in ???. (Should we go to 1ms, or maybe this will generate too much data?).</p>
+<p>Also, Sanchez-Gonzalez et al., simulations have between 1 and 5 seconds of simulated time.  To give users the option of using a little bit more information to train their models on, we will run all the simulation for 5 seconds.</p>
+<p>So, choosing these hyperparameters, our base case simulation will run in XX using a CCCC machine. So, assuming variations of this would take approximately this time (some would run in less or more depending on the size of the fluid block), then we would be able to simulate XXX cases on this hardware option. This is still not that many, so we need to go deeper on our study.</p>
+</section>
+<section id="choosing-the-best-vm-for-the-job">
+<h1>Choosing the best VM for the job<a class="headerlink" href="#choosing-the-best-vm-for-the-job" title="Permalink to this heading">#</a></h1>
+<p>Now that we have found a reasonable instantiation for the simulation hyperparameters, we can try to optimize for the type of VM that we should use. Inductiva’s computation is currently on Google Cloud VMs, and there are dozens of options available at different costs. GCP makes available VMs from multiple family types, e.g. c2, c2d, c3, etc . Different VM families run on different physical hardware, with different CPUs, RAM specs, motherboards, etc.</p>
+<p>Some simulation software was written to benefit from running on some specific hardware types, so their performance may change significantly from one VM family to another. In some cases, running simulations on less expensive VMs may actually lead to better performance than using more expensive VMs. Also, VMs come with a configurable number of vCPUs, which can go from mere 4 vCPUs to several dozens or hundreds as is the case of c2d and c3d machines. Typically, the more vCPUs you use the faster your simulation runs, but obviously, since scaling is never linear, there is a sweet spot. Again, using a machine with a a larger number of vCPU may not pay off since the efficiency of the parallelization decreases and, so the price you pay rises faster than the speed up benefits you collect.</p>
+<p>So, if we are running thousands of simulations, we better find the most cost-effective hardware so that we can run as many simulations as possible within our limited budget. Fortunately, Inductica API allows you to easily obtain performance statistics over all hardware options available. In short, the API allows you to get the list of all available VM options, and you can simply iterate through all of them using a “for loop” and collect the statistics you need. This is how you would run the base case, with the previously chosen hyperparameters, over the various vCPU configurations for 5 VMs families:</p>
+<p>With a bit of post-processing, you will get the following performance chart:</p>
+<p>[time to execute 1 base case simulation / vCPu for each family]</p>
+<p>And since we care mostly about cost (assuming we are ok with waiting a some time for the simulations to run) here this performance mapped to cost of simulation:</p>
+<p>[cost of 1 base case simulation / vCPU for each family]</p>
+<p>Please note that these costs have been computed using the prices made available by GCP for each VM type at the time of writing. So, we conclude that we would be better off using VMs of one of the following types:</p>
+<p>A  - some description and approximate cost per simulation
+B
+C</p>
+<p>These would allow us to run about ZZ simulations using the XXX budget that we have available for data generation. But there is still one more lever we can pull: using “spot instances” instead of “dedicated instances”.</p>
+</section>
+<section id="spot-instances-one-more-cost-saving-strategy">
+<h1>Spot Instances: one more cost saving strategy<a class="headerlink" href="#spot-instances-one-more-cost-saving-strategy" title="Permalink to this heading">#</a></h1>
+<p>Spot machines are VM that are available for computations as long as no one else requests them as dedicated instances. They can be seen as spare capacity that is not being requested by any user, so the cloud provider is better off renting them at a much cheaper price to anyone who is ok with losing access to them at any moment. So, running loads on spot instances does not guarantee that your job will get to the end. So, you may spend money executing part of the computation and then lose everything close to the end.</p>
+<p>However, the price at which you get those machines is 3 to 5 times lower than that of dedicated machines, which means that if you are ok with losing jobs once in a while, and that happens rarely (e.g. less than 1 in 4 times), then it is much cheaper to run them in a spot instance. This is especially so, if you can restart your jobs and try again automatically, as happens if you submit the job using the Inductiva API.</p>
+<p>Below, we show how you can request your job to run on a spot instance instead of running on a dedicated instance. You basically only need to set the parameter spot=True when starting your Machine Group:</p>
+<p>Thus, we can assume that the total cost per simulation can be only XXX (again, according to GCP pricing at the time of writing). This will allow us to run approximately XXX simulations, which seems already enough to generate a robust enough training set for the GNN models, especially given the fact that the authors of the paper used about 22k runs for all their tests.</p>
+<p>In the next post, we will explain how to actually run all these XXX simulations with only a few lines of code, while distributing the load over XXX VMs in parallel.</p>
+<section id="varying-the-particle-radius">
+<h2>Varying the particle radius<a class="headerlink" href="#varying-the-particle-radius" title="Permalink to this heading">#</a></h2>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Particle Radius</p></th>
+<th class="head"><p>Number of Particles</p></th>
+<th class="head"><p>Size of the data produces / MB</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0.008</p></td>
+<td><p>29791</p></td>
+<td><p>316</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.0082</p></td>
+<td><p>27000</p></td>
+<td><p>287</p></td>
+</tr>
+<tr class="row-even"><td><p>0.0085</p></td>
+<td><p>24389</p></td>
+<td><p>259</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.0088</p></td>
+<td><p>21952</p></td>
+<td><p>233</p></td>
+</tr>
+<tr class="row-even"><td><p>0.009</p></td>
+<td><p>21948</p></td>
+<td><p>233</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.0094</p></td>
+<td><p>19601</p></td>
+<td><p>208</p></td>
+</tr>
+<tr class="row-even"><td><p>0.0097</p></td>
+<td><p>17572</p></td>
+<td><p>186</p></td>
+</tr>
+</tbody>
+</table>
+<p>c3-standard-4 machine</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Particle Radius</p></th>
+<th class="head"><p>Running time</p></th>
+<th class="head"><p>Cost / USD</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0.008</p></td>
+<td><p>21 minutes 33 seconds</p></td>
+<td><p>0.0825</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.0082</p></td>
+<td><p>22 minutes 4 seconds</p></td>
+<td><p>0.0845</p></td>
+</tr>
+<tr class="row-even"><td><p>0.0085</p></td>
+<td><p>16 minutes 39 seconds</p></td>
+<td><p>0.0638</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.0088</p></td>
+<td><p>16 minutes 20 seconds</p></td>
+<td><p>0.0625</p></td>
+</tr>
+<tr class="row-even"><td><p>0.009</p></td>
+<td><p>17 minutes 46 seconds</p></td>
+<td><p>0.0680</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.0094</p></td>
+<td><p>13 minutes 15 seconds</p></td>
+<td><p>0.0507</p></td>
+</tr>
+<tr class="row-even"><td><p>0.0097</p></td>
+<td><p>13 minutes 32 seconds</p></td>
+<td><p>0.0519</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>0.01</strong></p></td>
+<td><p><strong>11 minutes 39 seconds</strong></p></td>
+<td><p><strong>0.0446</strong></p></td>
+</tr>
+</tbody>
+</table>
+<p>c3-standard-8 machine</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Particle Radius</p></th>
+<th class="head"><p>Running time</p></th>
+<th class="head"><p>Cost / USD</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0.008</p></td>
+<td><p>14 minutes 11 seconds</p></td>
+<td><p>0.1086</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.0082</p></td>
+<td><p>13 minutes</p></td>
+<td><p>0.0995</p></td>
+</tr>
+<tr class="row-even"><td><p>0.0085</p></td>
+<td><p>12 minutes 55 seconds</p></td>
+<td><p>0.0990</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.0088</p></td>
+<td><p>11 minutes 8 seconds</p></td>
+<td><p>0.0853</p></td>
+</tr>
+<tr class="row-even"><td><p>0.009</p></td>
+<td><p>9 minutes 28 seconds</p></td>
+<td><p>0.0726</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.0094</p></td>
+<td><p>9 minutes 12 seconds</p></td>
+<td><p>0.0705</p></td>
+</tr>
+<tr class="row-even"><td><p>0.0097</p></td>
+<td><p>8 minutes 7 seconds</p></td>
+<td><p>0.0623</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>0.01</strong></p></td>
+<td><p>*<strong>7 minutes 12 seconds</strong></p></td>
+<td><p><strong>0.0552</strong></p></td>
+</tr>
+</tbody>
+</table>
+<p>c3-standard-88</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Particle Radius</p></th>
+<th class="head"><p>Running time</p></th>
+<th class="head"><p>Cost / USD</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0.008</p></td>
+<td><p>4 minutes 41 seconds</p></td>
+<td><p>0.3957</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.0082</p></td>
+<td><p>5 minutes 2 seconds</p></td>
+<td><p>0.4244</p></td>
+</tr>
+<tr class="row-even"><td><p>0.0085</p></td>
+<td><p>3 minutes 50 seconds</p></td>
+<td><p>0.3234</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.0088</p></td>
+<td><p>4 minutes 2 seconds</p></td>
+<td><p>0.3407</p></td>
+</tr>
+<tr class="row-even"><td><p>0.009</p></td>
+<td><p>3 minutes 37 seconds</p></td>
+<td><p>0.3051</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.0094</p></td>
+<td><p>3 minutes 42 seconds</p></td>
+<td><p>0.3122</p></td>
+</tr>
+<tr class="row-even"><td><p>0.0097</p></td>
+<td><p>3 minutes 19 seconds</p></td>
+<td><p>0.2804</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>0.01</strong></p></td>
+<td><p><strong>3 minutes 4 seconds</strong></p></td>
+<td><p><strong>0.2593</strong></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="varying-simulation-time">
+<h2>Varying simulation time<a class="headerlink" href="#varying-simulation-time" title="Permalink to this heading">#</a></h2>
+<p><strong>Maybe Change</strong> <em>running time</em> to <em>computation time</em></p>
+<p>On a c3-standard-4 machine</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Simulation Time / s</p></th>
+<th class="head"><p>Running Time</p></th>
+<th class="head"><p>Cost</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>2 minutes 43 seconds</p></td>
+<td><p>0.0104</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>5 minutes</p></td>
+<td><p>0.0191</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>8 minutes 8 seconds</p></td>
+<td><p>0.0311</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>4</strong></p></td>
+<td><p><strong>11 minutes 39 seconds</strong></p></td>
+<td><p><strong>0.0446</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>14 minutes 29 seconds</p></td>
+<td><p>0.0555</p></td>
+</tr>
+</tbody>
+</table>
+<p>On a c3-standard-8</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Simulation Time / s</p></th>
+<th class="head"><p>Running Time</p></th>
+<th class="head"><p>Cost</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>1 minute 34 seconds</p></td>
+<td><p>0.0121</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>3 minutes 24 seconds</p></td>
+<td><p>0.0261</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>4 minutes 41 seconds</p></td>
+<td><p>0.0359</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>4</strong></p></td>
+<td><p>*<strong>7 minutes 12 seconds</strong></p></td>
+<td><p><strong>0.0552</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>8 minutes 36 seconds</p></td>
+<td><p>0.0658</p></td>
+</tr>
+</tbody>
+</table>
+<p>On a c3-standard-88</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Simulation Time / s</p></th>
+<th class="head"><p>Running Time</p></th>
+<th class="head"><p>Cost</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>0 minutes 46 seconds</p></td>
+<td><p>0.0648</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>1 minute 21 seconds</p></td>
+<td><p>0.1144</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>2 minutes 6 seconds</p></td>
+<td><p>0.1773</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>4</strong></p></td>
+<td><p><strong>3 minutes 4 seconds</strong></p></td>
+<td><p><strong>0.2593</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>3 minutes 28 seconds</p></td>
+<td><p>0.2932</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="varying-time-step-interval">
+<h2>Varying time step interval<a class="headerlink" href="#varying-time-step-interval" title="Permalink to this heading">#</a></h2>
+<p>For a c3-standard-4</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Simulation time step interval</p></th>
+<th class="head"><p>Running Time</p></th>
+<th class="head"><p>Cost</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0.001</p></td>
+<td><p>16 minutes 22 seconds</p></td>
+<td><p>0.0627</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>0.01</strong></p></td>
+<td><p><strong>11 minutes 39 seconds</strong></p></td>
+<td><p><strong>0.0446</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>0.0255</p></td>
+<td><p>12 minutes 29 seconds</p></td>
+<td><p>0.0478</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.05</p></td>
+<td><p>18 minutes 19 seconds</p></td>
+<td><p>0.0702</p></td>
+</tr>
+</tbody>
+</table>
+<p>For a c3-standard-8</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Simulation time step interval</p></th>
+<th class="head"><p>Running Time</p></th>
+<th class="head"><p>Cost</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0.001</p></td>
+<td><p>8 minutes 37 seconds</p></td>
+<td><p>0.0660</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>0.01</strong></p></td>
+<td><p>*<strong>7 minutes 12 seconds</strong></p></td>
+<td><p><strong>0.0552</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>0.0255</p></td>
+<td><p>6 minutes 49 seconds</p></td>
+<td><p>0.0522</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.05</p></td>
+<td><p>11 minutes 19 seconds</p></td>
+<td><p>0.0867</p></td>
+</tr>
+</tbody>
+</table>
+<p>For a c3-standard-88</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Simulation time step interval</p></th>
+<th class="head"><p>Running Time</p></th>
+<th class="head"><p>Cost</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0.001</p></td>
+<td><p>4 minutes 28 seconds</p></td>
+<td><p>0.3768</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>0.01</strong></p></td>
+<td><p><strong>3 minutes 4 seconds</strong></p></td>
+<td><p><strong>0.2593</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>0.0255</p></td>
+<td><p>3 minutes 20 seconds</p></td>
+<td><p>0.2808</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.05</p></td>
+<td><p>8 minutes 17 seconds</p></td>
+<td><p>0.6983</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Not sure why the values for 0.05 times step are larger.</strong> Maybe the simulation is erroneous and all particles clump together.</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="synthetic-data-generation-5.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Test the Impact of Hyperparameter Changes</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Benchmark Computational Resources</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#assessing-the-impact-of-changing-simulation-hyperparameters">Assessing the impact of changing simulation hyperparameters</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#choosing-the-best-vm-for-the-job">Choosing the best VM for the job</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#spot-instances-one-more-cost-saving-strategy">Spot Instances: one more cost saving strategy</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#varying-the-particle-radius">Varying the particle radius</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#varying-simulation-time">Varying simulation time</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#varying-time-step-interval">Varying time step interval</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Inductiva Research Labs
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, Inductiva Research Labs.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
