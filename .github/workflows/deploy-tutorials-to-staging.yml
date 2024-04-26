@@ -26,7 +26,7 @@ jobs:
         with:
           switches: -avzr --delete --no-perms --no-owner --no-group --omit-dir-times
           path: build/en/latest/
-          remote_path: /var/www/${{ secrets.STAGING_SERVER }}/tutorials/
+          remote_path: /var/www/${{ secrets.STAGING_SERVER }}/tutorials-99/
           remote_host: ${{secrets.STAGING_SERVER}}
           remote_user: inductiva-bot
           remote_key: ${{secrets.STAGING_WEB_SSH_KEY}}
