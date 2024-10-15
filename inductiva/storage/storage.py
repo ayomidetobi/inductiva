@@ -1,7 +1,11 @@
 """Methods to interact with the user storage resources."""
 import inductiva
-from inductiva.client.apis.tags import storage_api
+from inductiva.client import ApiClient
 from inductiva.utils import format_utils
+from inductiva.api.methods import upload_input
+from inductiva.client.apis.tags import storage_api
+from inductiva.client.apis.tags.tasks_api import TasksApi
+
 from typing import Literal
 
 
@@ -93,3 +97,12 @@ def _print_contents_table(contents):
         formatters=formatters,
         header_formatters=header_formatters,
     )
+
+def upload_files(my_local_folder, bucket_folder_name):
+
+    api_config = inductiva.api.methods.get_api_config()
+
+    with ApiClient(api_config) as client:
+        api_instance = TasksApi(client)
+
+    upload_input(api_instance=api_instance,)

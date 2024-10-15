@@ -62,7 +62,7 @@ def submit_request(api_instance: TasksApi,
 
 
 def upload_input(api_instance: TasksApi, task_id, original_params,
-                 type_annotations):
+                 type_annotations, upload_url, upload_method, upload_file_server_available):
     """Uploads the inputs of a given task to the API.
 
     Args:
@@ -70,6 +70,9 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
         task_id: ID of the task.
         original_params: Params of the request passed by the user.
         type_annotations: Annotations of the params' types.
+        upload_url: URL to upload the input files.
+        method: HTTP method to use for the upload.
+        file_server_available: Whether the file server is available.
     """
 
     inputs_size = files.get_path_size(original_params["sim_dir"])
@@ -89,12 +92,9 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
     logging.info("Uploading input archive...")
 
     try:
-        api_response = api_instance.get_input_upload_url(
-            path_params={"task_id": task_id})
-
-        method = api_response.body["method"]
-        url = api_response.body["url"]
-        file_server_available = bool(api_response.body["file_server_available"])
+        method = upload_method
+        url = upload_url
+        file_server_available = upload_file_server_available
 
         headers = {"Content-Type": "application/octet-stream"}
 
@@ -137,8 +137,7 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
                     reason=resp.reason,
                 )
 
-            api_response = api_instance.notify_input_uploaded(
-                path_params={"task_id": task_id})
+            api_instance.notify_input_uploaded(path_params={"task_id": task_id})
     except ApiException as e:
         logging.exception("Exception while uploading local input directory: %s",
                           e)
@@ -372,12 +371,20 @@ def submit_task(api_instance,
     )
 
     if task_submitted_info["status"] == "pending-input":
+        api_response = api_instance.get_input_upload_url(
+            path_params={"task_id": task_id})
+        upload_url = api_response.body["url"]
+        upload_method = api_response.body["method"]
+        upload_file_server_available = api_response.body["file_server_available"]
 
         upload_input(
             api_instance=api_instance,
             original_params=params,
             task_id=task_id,
             type_annotations=type_annotations,
+            upload_method=upload_method,
+            upload_url=upload_url,
+            upload_file_server_available=upload_file_server_available
         )
 
     return task_id
