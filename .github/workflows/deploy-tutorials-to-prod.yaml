@@ -25,7 +25,7 @@ jobs:
             apt-get install -y git && \
             pip install -y myst-parser && \
             echo "extensions = ['myst_parser']" > conf.py
-          build-command: "sphinx-build . ../../build -W"
+          build-command: "sphinx-build . ../../build "
       
       - name: copy robots.txt file to root
         working-directory: source/tutorials

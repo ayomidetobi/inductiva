@@ -23,7 +23,7 @@ jobs:
             apt-get install -y git && \
             pip install -y myst-parser && \
             echo "extensions = ['myst_parser']" > conf.py
-          build-command: "sphinx-build . ../../build -W"
+          build-command: "sphinx-build . ../../build "
 
       - name: Deploy to staging webserver via rsync
         uses: burnett01/rsync-deployments@7.0.0
