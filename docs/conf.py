@@ -98,7 +98,6 @@ ogp_image = "https://docs.inductiva.ai/_static/inductiva-social-banner.jpg"
 
 # sitemap.xml
 # See https://sphinx-sitemap.readthedocs.io/
-language = None
 version = ''
 release = ''
 html_baseurl = 'https://docs.inductiva.ai/'
