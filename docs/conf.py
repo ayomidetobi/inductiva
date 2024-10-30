@@ -102,6 +102,7 @@ language = None
 version = ''
 release = ''
 html_baseurl = 'https://docs.inductiva.ai/'
+sitemap_url_scheme = "{link}"
 
 #For redirects to work there needs to be an actual html file
 redirects = {
