@@ -108,6 +108,7 @@ language = None
 version = ''
 release = ''
 html_baseurl = 'https://tutorials.inductiva.ai/'
+sitemap_url_scheme = "{link}"
 
 redirects = {
     "intro_to_api/how_it_works.html":
