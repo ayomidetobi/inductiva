@@ -20,11 +20,6 @@ jobs:
 
       - uses: actions/checkout@v2
         with:
-          ref: development
-          path: source-dev
-
-      - uses: actions/checkout@v2
-        with:
           ref: gh-pages
           path: build
 
@@ -41,18 +36,7 @@ jobs:
             apt-get install -y git && \
             pip install -y myst-parser && \
             echo "extensions = ['myst_parser']" > conf.py
-          build-command: "sphinx-build . ../../build/en/latest -W -D version=latest"
-
-      - uses: nicholasphair/sphinx-action@7.0.0
-        with:
-          docs-folder: "source-dev/docs/"
-          # required by #1291
-          pre-build-command: |
-            apt-get update -y && \
-            apt-get install -y git && \
-            pip install -y myst-parser && \
-            echo "extensions = ['myst_parser']" > conf.py
-          build-command: "sphinx-build . ../../build/en/development -W -D version=development"
+          build-command: "sphinx-build . ../../build -W"
 
       - name: disable jekyll
         working-directory: build
@@ -61,10 +45,6 @@ jobs:
       - name: create subdomain CNAME file
         working-directory: build
         run: echo docs.inductiva.ai > CNAME
-
-      - name: configure client side redirection
-        working-directory: source/docs
-        run: cp redirect.html ../../build/index.html
 
       - name: copy robots.txt file to root
         working-directory: source/docs
